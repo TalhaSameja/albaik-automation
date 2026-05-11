@@ -1,0 +1,139 @@
+import { config as dotenvConfig } from 'dotenv';
+import { execSync } from 'child_process';
+import path from 'path';
+import AllureReporter from '@wdio/allure-reporter';
+import { getCapabilities } from './config/capabilities';
+
+dotenvConfig();
+
+// Ensure ANDROID_SDK_ROOT is set — Appium requires it even when ANDROID_HOME is set
+process.env.ANDROID_SDK_ROOT = process.env.ANDROID_SDK_ROOT || process.env.ANDROID_HOME;
+
+const TEST_PLATFORM = process.env.TEST_PLATFORM?.toLowerCase() || 'mobile';
+const isCrossPlatform = TEST_PLATFORM === 'cross-platform';
+const isWeb = TEST_PLATFORM === 'web';
+const testSpecs = isCrossPlatform
+  ? ['./src/features/cross-platform/**/*.feature', './src/features/web/**/*.feature', './src/features/mobile/**/*.feature']
+  : isWeb
+  ? ['./src/features/web/**/*.feature']
+  : ['./src/features/mobile/**/*.feature'];
+const stepDefinitionFiles = isCrossPlatform
+  ? [
+    './src/step_definitions/Common/Common_StepDef_Mob.ts',
+    './src/step_definitions/Common/Common_StepDef_web.ts',
+    './src/step_definitions/mobile/*.ts',
+    './src/step_definitions/web/*.ts',
+    './src/step_definitions/cross-platform/**/*.ts',
+  ]
+  : isWeb
+  ? ['./src/step_definitions/Common/Common_StepDef_Web.ts']
+  : ['./src/step_definitions/mobile/SettingsSteps.ts', './src/step_definitions/mobile/AlbaikHomeSteps.ts'];
+
+function resolveAppiumPath(): string {
+  try {
+    const result = execSync('where.exe appium', { encoding: 'utf8' });
+    return result.trim().split(/\r?\n/)[0].trim();
+  } catch {
+    const prefix = execSync('npm config get prefix', { encoding: 'utf8' }).trim();
+    return path.join(prefix, 'appium.cmd');
+  }
+}
+
+export const config: WebdriverIO.Config = {
+  runner: 'local',
+
+  specs: testSpecs,
+
+  exclude: [],
+
+  maxInstances: isCrossPlatform ? 2 : 1,
+
+  capabilities: (isCrossPlatform
+    ? {
+        mobile: {
+          capabilities: getCapabilities('mobile'),
+        },
+        web: {
+          capabilities: getCapabilities('web'),
+        },
+      }
+    : [getCapabilities(TEST_PLATFORM)]) as any,
+
+  logLevel: 'error',
+
+  bail: 0,
+
+  waitforTimeout: 30000,
+
+  connectionRetryTimeout: 120000,
+
+  connectionRetryCount: 3,
+
+  services: [
+    [
+      'appium',
+      {
+        command: resolveAppiumPath(),
+        args: {
+          relaxedSecurity: true,
+          log: './appium.log',
+        },
+      },
+    ],
+  ],
+
+  framework: 'cucumber',
+
+  reporters: [
+    ['spec', { realtimeReporting: true }],
+    [
+      'allure',
+      {
+        outputDir: 'allure-results',
+        disableWebdriverStepsReporting: true,
+        disableWebdriverScreenshotsReporting: false,
+        useCucumberStepReporter: true,
+        addConsoleLogs: true,
+      },
+    ],
+  ],
+
+  afterScenario: async function (_world, result) {
+    if (!result.passed) {
+      try {
+        const screenshot = await browser.takeScreenshot();
+        if (typeof screenshot === 'string') {
+          AllureReporter.addAttachment(
+            'Screenshot on Failure',
+            Buffer.from(screenshot, 'base64'),
+            'image/png'
+          );
+        } else if (screenshot && typeof screenshot === 'object') {
+          for (const [browserName, base64Data] of Object.entries(screenshot)) {
+            AllureReporter.addAttachment(
+              `Screenshot on Failure - ${browserName}`,
+              Buffer.from(base64Data as string, 'base64'),
+              'image/png'
+            );
+          }
+        }
+      } catch (error) {
+        console.error('Failed to capture screenshot:', error);
+      }
+    }
+  },
+
+  cucumberOpts: {
+    require: stepDefinitionFiles,
+    backtrace: false,
+    requireModule: [],
+    dryRun: false,
+    failFast: false,
+    snippets: true,
+    source: true,
+    strict: false,
+    tagExpression: '',
+    timeout: 60000,
+    ignoreUndefinedDefinitions: false,
+  },
+};
