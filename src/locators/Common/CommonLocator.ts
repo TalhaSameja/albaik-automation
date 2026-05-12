@@ -94,7 +94,9 @@ export const CommonLocators = {
   refreshButton: '//button[@id="refresh"]',
     pageHeading: 'h1',
   moreInfoLink: 'a',
+  dynamicTextInput: (text: string) => `//android.widget.EditText[@text="${text}" or @resource-id="${text}"]`,
   emailInput: '//input[@name="email" or @type="email"]',
-  passwordInput: '//input[@name="password" or @type="password"]',
+  passwordInput: '//android.widget.ScrollView/android.view.ViewGroup/android.view.ViewGroup[2]/android.widget.EditText',
   loginBtn: "//input[@name='commit']",
+  cardEndingWith: (lastFourDigits: string) => `//android.view.ViewGroup[@content-desc="ENDING, ${lastFourDigits}"]/com.horcrux.svg.SvgView/com.horcrux.svg.g/com.horcrux.svg.p`,
 };
