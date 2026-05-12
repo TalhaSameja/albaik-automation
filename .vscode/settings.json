@@ -1,0 +1,18 @@
+{
+    "cucumberautocomplete.steps": [
+        "src/step_definitions/**/*.ts",
+        "src/step_definitions/**/*.js"
+    ],
+    "cucumberautocomplete.syncfeatures": "src/features/**/*.feature",
+    "cucumberautocomplete.strictGherkinCompletion": false,
+    "cucumberautocomplete.strictGherkinValidation": false,
+    "cucumberautocomplete.smartSnippets": true,
+    "cucumberautocomplete.stepsInvariants": true,
+    "cucumberautocomplete.stepsInSingleFile": false,
+    "cucumberautocomplete.gherkinDefinitionPart": "(Given|When|Then|And|But)\\(",
+    "cucumberautocomplete.onStepDefinitionNotFound": "log",
+    "cucumberautocomplete.skipDocStringsFormat": true,
+    "files.associations": {
+        "*.feature": "feature"
+    }
+}
