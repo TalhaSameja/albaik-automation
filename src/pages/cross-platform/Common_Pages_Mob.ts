@@ -1,6 +1,9 @@
 import { CommonLocators } from '../../locators/Common/CommonLocator';
 import { BasePage } from '../../common/mobile/BasePage';
 import { qrCodeUrls } from '../../data/Common/testData';
+import * as QRCode from 'qrcode';
+import * as fs from 'fs';
+import * as path from 'path';
 
 export class CommonFunctionPage extends BasePage {
 
@@ -68,44 +71,49 @@ export class CommonFunctionPage extends BasePage {
     await this.browserInstance.pause(seconds * 1000);
   }
 
-  async scanQRCode(fileName: string): Promise<void> {
-    const url = qrCodeUrls[fileName];
-    if (!url) {
-      throw new Error(`No QR code URL mapping found for file: ${fileName}`);
+  async scanQRCode(dataKey: string): Promise<void> {
+    // 1. Look up the QR code data (URL) using the key from the feature file.
+    const qrData = qrCodeUrls[dataKey];
+    if (!qrData) {
+      throw new Error(`No QR code data found for key: "${dataKey}". Check src/data/Common/testData.ts`);
     }
 
-    const appPackage = process.env.APP_PACKAGE || 'com.albaik.customer.staging';
-    console.log(`[QR Scan] Decoded URL from "${fileName}" → ${url}`);
-
-    // Strategy 1: Appium native deepLink command (cleanest, modern Appium)
-    try {
-      await this.browserInstance.execute('mobile: deepLink', {
-        url: url,
-        package: appPackage,
-      });
-      console.log(`[QR Scan] ✅ Deep link fired via mobile:deepLink → ${url}`);
-      return;
-    } catch (e1) {
-      console.warn(`[QR Scan] mobile:deepLink failed (${(e1 as Error).message}), trying am start...`);
-    }
-
-    // Strategy 2: adb shell am start with VIEW intent
-    try {
-      await this.browserInstance.execute('mobile: shell', {
-        command: 'am',
-        args: ['start', '-a', 'android.intent.action.VIEW', '-d', url],
-      });
-      console.log(`[QR Scan] ✅ Deep link fired via am start → ${url}`);
-      return;
-    } catch (e2) {
-      console.warn(`[QR Scan] am start failed (${(e2 as Error).message}), trying with package...`);
-    }
-
-    // Strategy 3: adb shell am start scoped to the app package and explicit component
-    await this.browserInstance.execute('mobile: shell', {
-      command: 'am',
-      args: ['start', '-W', '-n', `${appPackage}/com.albaikapp.MainActivity`, '-a', 'android.intent.action.VIEW', '-d', url],
+    // 2. Generate a clean, borderless QR code image buffer on-the-fly.
+    // This avoids issues with image files having borders or extra text.
+    console.log(`Generating QR code from data: "${qrData}"`);
+    const pngBuffer = await QRCode.toBuffer(qrData, {
+        margin: 1, // Use a minimal margin to ensure scanner compatibility
+        errorCorrectionLevel: 'H' // High error correction level
     });
-    console.log(`[QR Scan] ✅ Deep link fired via am start + package → ${url}`);
+    const base64Image = pngBuffer.toString('base64');
+
+    // 3. Inject the generated image
+    console.log(`Injecting generated QR code for data "${qrData}" into the emulator's virtual camera.`);
+    await this.browserInstance.execute('mobile: injectEmulatorCameraImage', { payload: base64Image });
+    console.log('Image injection command sent successfully.');
+
+    // 4. Pause to allow the app's scanner to process the new camera feed
+    await this.browserInstance.pause(5000); // 5-second pause for processing
+
+    // 5. Simulate a user tap to trigger focus or scanning
+    console.log('Simulating a tap on the screen to trigger scanner focus.');
+    const windowSize = await this.browserInstance.getWindowSize();
+    const centerX = windowSize.width / 2;
+    const centerY = windowSize.height / 2;
+
+    await this.browserInstance.performActions([
+      {
+        type: 'pointer',
+        id: 'finger1',
+        parameters: { pointerType: 'touch' },
+        actions: [
+          { type: 'pointerMove', duration: 0, x: centerX, y: centerY },
+          { type: 'pointerDown', button: 0 },
+          { type: 'pause', duration: 50 },
+          { type: 'pointerUp', button: 0 }
+        ]
+      }
+    ]);
+    await this.browserInstance.pause(2000); // Pause after tap for UI to react
   }
 }

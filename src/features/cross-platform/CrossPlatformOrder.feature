@@ -5,15 +5,15 @@ Feature: Cross-Platform Order Placement and Verification
       Given The Albaik application is launched on emulator
       #Then Verify that the "NOTICE" text is displayed
       #Then Click on "Close" button
-      Then Verify that the "Deliver to an address" text is displayed
+      Then Verify that the "Delivery" text is displayed
       Then Click on "Scan to Order" button
-      # Then Click on "Open Camera" button
-      # Then wait for "30" Seconds
+      Then Click on "Open Camera" button
       Then Scan QR code from file "branch-KTM Test Branch-qrcode.svg"
-      Then wait for "5" Seconds
-
+      # After scanning, verify that we are on the store's page.
+      Then Verify that the "KTM Test Branch" text is displayed
       # Then Click on "Choose an address" button
       # Then Verify that the "Delivery" text is displayed
+      # Then wait for "30" Seconds
 
     # Web - Verify Order in Admin Panel
       # Then navigate to the web admin panel
@@ -24,4 +24,10 @@ Feature: Cross-Platform Order Placement and Verification
       # Then Click on "Pickup" button
       # Then Verify that the "Pickup" text is displayed
       # Then Click on "Search manually" button
+      # Then wait for "30" Seconds
+     
 
+
+
+    
+    

@@ -13,14 +13,14 @@ const TEST_PLATFORM = process.env.TEST_PLATFORM?.toLowerCase() || 'mobile';
 const isCrossPlatform = TEST_PLATFORM === 'cross-platform';
 const isWeb = TEST_PLATFORM === 'web';
 const testSpecs = isCrossPlatform
-  ? ['./src/features/cross-platform/**/*.feature']
+  ? ['./src/features/cross-platform/**/*.feature', './src/features/web/**/*.feature', './src/features/mobile/**/*.feature']
   : isWeb
   ? ['./src/features/web/**/*.feature']
   : ['./src/features/mobile/**/*.feature'];
 const stepDefinitionFiles = isCrossPlatform
   ? [
     './src/step_definitions/Common/Common_StepDef_Mob.ts',
-    './src/step_definitions/Common/Common_StepDef_Web.ts',
+    './src/step_definitions/Common/Common_StepDef_web.ts',
     './src/step_definitions/mobile/*.ts',
     './src/step_definitions/web/*.ts',
     './src/step_definitions/cross-platform/**/*.ts',
