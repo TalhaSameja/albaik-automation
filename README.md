@@ -1,229 +1,93 @@
-# Albaik Mobile Automation Framework
+# Albaik-Automation
 
-BDD mobile automation framework using WebDriverIO + Appium + Cucumber + TypeScript.
 
----
 
-## Prerequisites
+## Getting started
 
-Make sure you have the following installed:
+To make it easy for you to get started with GitLab, here's a list of recommended next steps.
 
-| Tool | Version | Check |
-|---|---|---|
-| Node.js | v18+ | `node --version` |
-| Java JDK | 11+ | `java -version` |
-| Android Studio | Latest | — |
-| Appium | 2.x+ | `appium --version` |
-| UiAutomator2 driver | Any | `appium driver list --installed` |
+Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
 
-If UiAutomator2 is missing, install it:
-```bash
-appium driver install uiautomator2
-```
+## Add your files
 
-Set `ANDROID_HOME` if not already set (run in PowerShell as Administrator):
-```powershell
-[System.Environment]::SetEnvironmentVariable("ANDROID_HOME", "C:\Users\<YOUR_USERNAME>\AppData\Local\Android\Sdk", "User")
-$currentPath = [System.Environment]::GetEnvironmentVariable("PATH", "User")
-[System.Environment]::SetEnvironmentVariable("PATH", "$currentPath;C:\Users\<YOUR_USERNAME>\AppData\Local\Android\Sdk\platform-tools", "User")
-```
-Then restart your terminal and verify: `echo $env:ANDROID_HOME`
-
----
-
-## Setup
-
-**1. Install dependencies**
-```bash
-npm install
-```
-
-**2. Set up your emulator or connect a physical device**
-
-For emulator (Android Studio):
-- Open Android Studio → Device Manager → Create Virtual Device
-- Pick a hardware profile (e.g. Pixel 7) and a system image (e.g. API 34)
-- Start the emulator
-- If the screen is blank, run: `adb shell input keyevent 224` to wake it, then `adb shell input swipe 500 1500 500 500` to unlock
-
-For physical device:
-- Enable Developer Options and USB Debugging on the device
-- Connect via USB
-- Run `adb devices` to confirm it's detected
-
-**3. Install the Albaik app on your device/emulator**
-
-If you have an APK, drop it into the `apps/` folder.
-If the app is already installed from the Play Store, skip this.
-
-**4. Get your device details**
-```bash
-# List connected devices
-adb devices
-
-# Get Android version
-adb shell getprop ro.build.version.release
-
-# Get app package and activity (open the app first, then run)
-adb shell dumpsys window | grep mCurrentFocus
-```
-
-**5. Configure your `.env` file**
-
-Copy `.env.example` to `.env` and fill in your values:
-```
-ANDROID_HOME=C:\Users\<YOUR_USERNAME>\AppData\Local\Android\Sdk
-
-DEVICE_NAME=emulator-5554
-PLATFORM_VERSION=14.0
-UDID=                          # Leave blank for emulator
-
-APP_PATH=./apps/albaik.apk     # Leave blank if app is already installed
-APP_PACKAGE=com.albaik.app
-APP_ACTIVITY=.MainActivity
-```
-
----
-
-## Running Tests
-
-```bash
-# Run all tests
-npm test
-
-# Run tests by tag (e.g. @smoke)
-npm run test:tag @smoke
-```
-
----
-
-## Reports
-
-After a test run, generate and open the Allure report:
-```bash
-npm run allure:report
-```
-
----
-
-## Project Structure
+* [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
+* [Add files using the command line](https://docs.gitlab.com/topics/git/add_files/#add-files-to-a-git-repository) or push an existing Git repository with the following command:
 
 ```
-albaik_mobileAutomation/
-├── apps/                          # Place your APK here
-├── config/
-│   └── capabilities.ts            # Appium device/app capabilities
-├── features/                      # Gherkin .feature files only
-├── step_definitions/              # Step definition .ts files
-├── hooks/
-│   └── hooks.ts                   # Extension point for custom Cucumber hooks
-├── src/
-│   ├── pages/
-│   │   └── BasePage.ts            # Reusable page actions (tap, fill, scroll, etc.)
-│   └── utils/
-│       ├── gestures.ts            # Swipe/scroll helpers
-│       └── helpers.ts             # App launch, reset, keyboard helpers
-├── .env                           # Your local config (do not commit)
-├── .env.example                   # Config template
-└── wdio.config.ts                 # Main framework config
+cd existing_repo
+git remote add origin https://gitlab.virtualforce.io/kualitatem/albaik-automation.git
+git branch -M master
+git push -uf origin master
 ```
 
----
+## Integrate with your tools
 
-## Finding Element Locators (Appium Inspector)
+* [Set up project integrations](https://gitlab.virtualforce.io/kualitatem/albaik-automation/-/settings/integrations)
 
-Before writing any test, you need to inspect the app's elements to get their locators. Use **Appium Inspector** for this.
+## Collaborate with your team
 
-**Install Appium Inspector**
-Download the latest release from: https://github.com/appium/appium-inspector/releases
-Install and open it.
+* [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
+* [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
+* [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
+* [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
+* [Set auto-merge](https://docs.gitlab.com/user/project/merge_requests/auto_merge/)
 
-**Start a session**
+## Test and Deploy
 
-1. Make sure your emulator is running and the Albaik app is installed
-2. Start the Appium server in a terminal:
-   ```bash
-   appium
-   ```
-3. In Appium Inspector, set the connection details:
-   ```
-   Remote Host: localhost
-   Remote Port: 4723
-   Remote Path: /
-   ```
-4. Add these capabilities and click **Start Session**:
-   ```json
-   {
-     "platformName": "Android",
-     "appium:deviceName": "emulator-5554",
-     "appium:automationName": "UiAutomator2",
-     "appium:appPackage": "your.app.package",
-     "appium:appActivity": "your.app.activity",
-     "appium:noReset": true
-   }
-   ```
+Use the built-in continuous integration in GitLab.
 
-**Find your locator**
+* [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/)
+* [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
+* [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
+* [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
+* [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
 
-Once the session starts, you'll see a live screenshot of the app. Click any element and Appium Inspector will show its attributes in the right panel. Use them in this priority order:
+***
 
-| Priority | Attribute | WDIO Selector Syntax | Example |
-|---|---|---|---|
-| 1st | `accessibility id` (content-desc) | `~value` | `~login_button` |
-| 2nd | `resource-id` | `android=new UiSelector().resourceId("id")` | `android=new UiSelector().resourceId("com.albaik.app:id/btn_login")` |
-| 3rd | `text` | `android=new UiSelector().text("value")` | `android=new UiSelector().text("Login")` |
-| Last | `xpath` | `//ClassName[@attr="value"]` | `//android.widget.Button[@text="Login"]` |
+# Editing this README
 
-> Prefer `accessibility id` and `resource-id` over XPath — they are faster and more stable.
+When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
 
----
+## Suggestions for a good README
 
-## Adding Tests
+Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
 
-**1. Create a feature file** under `features/`
-```gherkin
-Feature: Login
+## Name
+Choose a self-explaining name for your project.
 
-  @smoke
-  Scenario: User logs in with valid credentials
-    Given the user is on the login screen
-    When the user enters valid credentials
-    Then the user should see the home screen
-```
+## Description
+Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
 
-**2. Create a Page Object** under `src/pages/` extending `BasePage`
-```typescript
-import { BasePage } from './BasePage';
+## Badges
+On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
 
-class LoginPage extends BasePage {
-  private usernameField = '~username_input';
-  private passwordField = '~password_input';
-  private loginButton   = '~login_button';
+## Visuals
+Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
 
-  async enterUsername(username: string) { await this.fill(this.usernameField, username); }
-  async enterPassword(password: string) { await this.fill(this.passwordField, password); }
-  async tapLogin()                       { await this.tap(this.loginButton); }
-}
+## Installation
+Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
 
-export default new LoginPage();
-```
+## Usage
+Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
 
-**3. Create a step definition** under `step_definitions/`
-```typescript
-import { Given, When, Then } from '@cucumber/cucumber';
-import LoginPage from '../../src/pages/LoginPage';
+## Support
+Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
 
-Given('the user is on the login screen', async () => {
-  await LoginPage.waitForElement('~login_screen');
-});
+## Roadmap
+If you have ideas for releases in the future, it is a good idea to list them in the README.
 
-When('the user enters valid credentials', async () => {
-  await LoginPage.enterUsername('testuser');
-  await LoginPage.enterPassword('password123');
-  await LoginPage.tapLogin();
-});
+## Contributing
+State if you are open to contributions and what your requirements are for accepting them.
 
-Then('the user should see the home screen', async () => {
-  await LoginPage.waitForElement('~home_screen');
-});
-```
+For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+
+You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+
+## Authors and acknowledgment
+Show your appreciation to those who have contributed to the project.
+
+## License
+For open source projects, say how it is licensed.
+
+## Project status
+If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
