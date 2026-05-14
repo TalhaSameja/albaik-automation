@@ -19,6 +19,11 @@ Then(/^wait for "?(\d+)"? [sS]econds?\s*$/, async (seconds: string) => {
   await commonFunctionPage.wait_for_seconds(parseInt(seconds));
 });
 
-Then('Scan QR code from file {string}', async (fileName: string) => {
-  await commonFunctionPage.scanQRCode(fileName);
+// Then('Scan QR code from file {string}', async (fileName: string) => {
+//   await commonFunctionPage.scanQRCode(fileName);
+// });
+When('I bypass the QR scan for {string}', async (branchKey: string) => {
+    // We call the deep link method directly. 
+    // This ignores the camera and jumps straight to the store.
+    await commonFunctionPage.bypassQRWithDeepLink(branchKey);
 });
