@@ -292,5 +292,32 @@ export class CommonFunctionPage extends BasePage {
 
         await this.browserInstance.pause(4000);
     }
+    async capture_and_store_order_id(
+  trackingCardId: string
+) {
+
+  const orderIdLocator =
+    CommonLocators.trackingOrderId(trackingCardId);
+
+  const orderIdElement =
+    await this.browserInstance.$(orderIdLocator);
+
+  await orderIdElement.waitForDisplayed({
+    timeout: 20000,
+  });
+
+  const fullText =
+    await orderIdElement.getText();
+
+  // Example => #S71582
+  const orderId =
+    fullText.replace('#', '').trim();
+
+  global.orderId = orderId;
+
+  console.log(
+    `Captured Order ID: ${global.orderId}`
+  );
+}
       
 }

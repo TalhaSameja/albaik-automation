@@ -23,11 +23,11 @@ Feature: Cross-Platform Order Placement and Verification
       Then Click on "View Basket" button
       Then Click on "Confirm Order" button
       Then Scroll down "2" lines
-      Then Select card ending with "0008"
       Then Click on "Continue" button
       Then Enter "123" into "checkoutCvv" Input
       Then Click on "Pay with card" button
-      Then wait for "20" Seconds
+      Then wait for "180" Seconds
+      Then Capture and store order id from tracking card "tracking-instore"
       
 
       
@@ -36,6 +36,7 @@ Feature: Cross-Platform Order Placement and Verification
       # Then navigate to the web admin panel
       # Then login to the admin panel
       # Then the restaurant panel is loaded and ready
+# Then Search captured order id in web search field "Search Order ID"
 
     # Mobile - Pickup
       # Then Click on "Pickup" button

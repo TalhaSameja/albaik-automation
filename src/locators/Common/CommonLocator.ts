@@ -95,6 +95,20 @@ export const CommonLocators = {
     pageHeading: 'h1',
   moreInfoLink: 'a',
   dynamicTextInput: (text: string) => `//android.widget.EditText[@text="${text}" or @resource-id="${text}"]`,
+    // Tracking Card
+  trackingCard: (resourceId: string) =>
+    `//android.view.ViewGroup[@resource-id="${resourceId}"]`,
+
+  // Dynamic Order ID inside tracking card
+  trackingOrderId: (resourceId: string) =>
+    `//android.view.ViewGroup[@resource-id="${resourceId}"]//android.widget.TextView[contains(@text,"#")]`,
+   // Dynamic Search Field on Web
+  dynamicSearchField: (placeholder: string) =>
+    `//input[@placeholder="${placeholder}"]`,
+
+  // Dynamic Order Row
+  dynamicOrderRow: (orderId: string) =>
+    `//*[contains(text(),"${orderId}")]`,
   emailInput: '//input[@name="email" or @type="email"]',
   passwordInput: '//android.widget.ScrollView/android.view.ViewGroup/android.view.ViewGroup[2]/android.widget.EditText',
   loginBtn: "//input[@name='commit']",

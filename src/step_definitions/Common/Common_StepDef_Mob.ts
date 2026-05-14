@@ -19,7 +19,7 @@ Then('Click on profile icon', async () => {
   await commonFunctionPage.click_profile_icon();
 });
 
-Then(/^wait for "?(\d+)"? [sS]econds?\s*$/, async (seconds: string) => {
+Then(/^wait for "?(\d+)"? [sS]econds?\s*$/, { timeout: 600000 }, async (seconds: string) => {
   await commonFunctionPage.wait_for_seconds(parseInt(seconds));
 });
 
@@ -46,6 +46,16 @@ Then('Enter {string} as password', async (password: string) => {
 Then('Select card ending with {string}', async (lastFourDigits: string) => {
   await commonFunctionPage.select_card_ending_with(lastFourDigits);
 });
+Then(
+  'Capture and store order id from tracking card {string}',
+  async (trackingCardId: string) => {
+    await commonFunctionPage.capture_and_store_order_id(
+      trackingCardId
+    );
+  }
+);
+
+
 
 
 
