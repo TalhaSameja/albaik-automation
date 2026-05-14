@@ -15,15 +15,41 @@ Then('Click on {string} button', async (text: string) => {
   await commonFunctionPage.click_btn(text);
 });
 
+Then('Click on profile icon', async () => {
+  await commonFunctionPage.click_profile_icon();
+});
+
 Then(/^wait for "?(\d+)"? [sS]econds?\s*$/, async (seconds: string) => {
   await commonFunctionPage.wait_for_seconds(parseInt(seconds));
 });
 
-// Then('Scan QR code from file {string}', async (fileName: string) => {
-//   await commonFunctionPage.scanQRCode(fileName);
-// });
-When('I bypass the QR scan for {string}', async (branchKey: string) => {
-    // We call the deep link method directly. 
-    // This ignores the camera and jumps straight to the store.
-    await commonFunctionPage.bypassQRWithDeepLink(branchKey);
+Then(/^Scroll down "(\d+)" lines?$/, async (lines: string) => {
+  await commonFunctionPage.scrollDownLines(parseInt(lines));
+});
+
+Then('Write {string} in the input field', async (text: string) => {
+  await commonFunctionPage.write_in_input_field(text);
+});
+
+Then('Enter {string} into {string} Input', async (text: string, inputName: string) => {
+  await commonFunctionPage.enter_text_in_input_field(text, inputName);
+});
+
+Then('Enter password', async () => {
+  await commonFunctionPage.enter_password();
+});
+
+Then('Enter {string} as password', async (password: string) => {
+  await commonFunctionPage.enter_password(password);
+});
+
+Then('Select card ending with {string}', async (lastFourDigits: string) => {
+  await commonFunctionPage.select_card_ending_with(lastFourDigits);
+});
+
+
+
+When('I redirect to branch {string} to bypass QR scan', async (branchId: string) => {
+    // Uses the Intent methodology to redirect the front-end UI
+    await commonFunctionPage.redirectToBranchViaIntent(branchId);
 });

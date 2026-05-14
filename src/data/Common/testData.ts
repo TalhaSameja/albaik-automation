@@ -3,9 +3,7 @@
  * Centralized test data for web portal and mobile app
  */
 
-// export const qrCodeUrls: { [key: string]: string } = {
-//   'branch-KTM Test Branch-qrcode.svg': 'albaik://store/539',
-// };
+
 export const qrCodeUrls: { [key: string]: string } = {
   // Change the key here to match your Feature File
   'KTM_BRANCH': 'albaik://store/539', 
@@ -18,8 +16,8 @@ export const testData = {
     
   },
   mobile: {
-    phoneNumber: '512399999',
-    password: 'Kualitatem123',
+    phoneNumber: '532255875',
+    password: '11223344',
     qrCodes: qrCodeUrls,
   },
   carPickupOrder: {

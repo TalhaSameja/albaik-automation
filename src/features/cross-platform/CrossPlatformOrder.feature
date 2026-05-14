@@ -5,20 +5,32 @@ Feature: Cross-Platform Order Placement and Verification
       Given The Albaik application is launched on emulator
       # Then Verify that the "NOTICE" text is displayed
       # Then Click on "Close" button
-      Then Verify that the "Delivery" text is displayed
-      Then Click on "Scan to Order" button
-      Then Click on "Open Camera" button
-     
+      Then Verify that the "Skip" text is displayed
+      Then Click on "Skip" button
+      Then Scroll down "2" lines
+      Then Click on profile icon
+      Then Click on "Sign In" button
+      Then Enter "532255875" into "5XXXXXXXX" Input
+      Then Enter "11223344" as password
+      Then Click on "Sign In" button
+      Then wait for "10" Seconds
+      And I redirect to branch "539" to bypass QR scan
       Then Verify that the "Start" text is displayed
       Then Click on "Start" button
-      Then wait for "30" Seconds
-      # When I bypass the QR scan for "KTM_BRANCH"
-      # Then Scan QR code from file "branch-KTM Test Branch-qrcode.svg"
-      # After scanning, verify that we are on the store's page.
-      # Then Verify that the "KTM Test Branch" text is displayed
-      # Then Click on "Choose an address" button
-      # Then Verify that the "Delivery" text is displayed
-      # Then wait for "30" Seconds
+      Then Scroll down "2" lines
+      Then Click on "Falafel Meal" button
+      Then Click on "Add to order" button
+      Then Click on "View Basket" button
+      Then Click on "Confirm Order" button
+      Then Scroll down "2" lines
+      Then Select card ending with "0008"
+      Then Click on "Continue" button
+      Then Enter "123" into "checkoutCvv" Input
+      Then Click on "Pay with card" button
+      Then wait for "20" Seconds
+      
+
+      
 
     # Web - Verify Order in Admin Panel
       # Then navigate to the web admin panel
