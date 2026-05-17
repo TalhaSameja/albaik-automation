@@ -34,7 +34,7 @@ const testSpecs = isCrossPlatform
 
   : isWeb
 
-  ? ['./src/features/web/**/*.feature']
+  ? ['./src/features/web/**/*.feature', './src/features/cross-platform/**/*.feature']
 
   : ['./src/features/mobile/**/*.feature'];
 
@@ -56,7 +56,11 @@ const stepDefinitionFiles = isCrossPlatform
 
   : isWeb
 
-  ? ['./src/step_definitions/Common/Common_StepDef_Web.ts']
+  ? [
+      './src/step_definitions/Common/Common_StepDef_Web.ts',
+      './src/step_definitions/web/**/*.ts',
+      './src/step_definitions/cross-platform/**/*.ts'
+    ]
 
   : ['./src/step_definitions/mobile/SettingsSteps.ts', './src/step_definitions/mobile/AlbaikHomeSteps.ts'];
 

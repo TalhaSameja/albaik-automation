@@ -2,27 +2,93 @@ import { testData } from '../../data/Common/testData';
 import { CommonLocators } from '../../locators/Common/CommonLocator';
 
 export class CommonWebPage {
+    // Dynamically target the 'web' capability during cross-platform multi-remote tests
+    private get webDriver() {
+        return (browser as any).isMultiremote ? (browser as any).web : browser;
+    }
+
+    /**
+     * Navigates to the base URL configured in testData
+     */
+    async navigateToAdminPanel() {
+        await this.webDriver.url(testData.web.baseUrl);
+    }
+
     /**
      * Performs login to the Admin Panel using credentials from testData
      */
     async loginToAdmin() {
-        const webBrowser = (browser as any).web;
-
-        await webBrowser.$(CommonLocators.emailInput).waitForDisplayed({ timeout: 10000 });
-        await webBrowser.$(CommonLocators.emailInput).setValue(testData.web.email);
+        await this.webDriver.$(CommonLocators.emailInput).waitForDisplayed({ timeout: 10000 });
+        await this.webDriver.$(CommonLocators.emailInput).setValue(testData.web.email);
         
-        await webBrowser.$(CommonLocators.passwordInput).setValue(testData.web.password);
+        await this.webDriver.$(CommonLocators.webPasswordInput).setValue(testData.web.password);
         
-        await webBrowser.$(CommonLocators.loginBtn).click();
+        await this.webDriver.$(CommonLocators.loginBtn).click();
     }
 
     /**
      * Verifies the restaurant panel heading and waits 5 seconds for full loading
      */
     async waitForRestaurantPanel() {
-        const webBrowser = (browser as any).web;
+        await this.webDriver.pause(5000);
+    }
+
+    /**
+     * Pauses the web driver for a specified number of seconds
+     */
+    async wait_for_seconds_web(seconds: number) {
+        await this.webDriver.pause(seconds * 1000);
+    }
+
+    async click_web_link_by_href(href: string) {
+        const locator = CommonLocators.webLinkByHref(href);
+        const element = await this.webDriver.$(locator);
+        await element.waitForDisplayed({ timeout: 15000 });
+        await element.click();
+    }
+
+    async enter_captured_order_id_by_id(id: string) {
+        const locator = CommonLocators.webInputById(id);
+        const element = await this.webDriver.$(locator);
+        await element.waitForDisplayed({ timeout: 15000 });
         
-  
-        await webBrowser.pause(5000);
+        const capturedOrderId = global.orderId;
+        if (!capturedOrderId) {
+            throw new Error("Order ID was not captured previously!");
+        }
+        
+        await element.setValue(capturedOrderId);
+        console.log(`[Web] Entered captured Order ID: ${capturedOrderId}`);
+    }
+
+    async hit_enter_web() {
+        await this.webDriver.keys(['Enter']);
+        console.log(`[Web] Hit 'Enter' key`);
+    }
+
+    async click_captured_order_row() {
+        const capturedOrderId = global.orderId;
+        if (!capturedOrderId) {
+            throw new Error("Order ID was not captured previously!");
+        }
+        
+        // Using the existing dynamicOrderRow locator to find the order in the table
+        const locator = CommonLocators.dynamicOrderRow(capturedOrderId);
+        const element = await this.webDriver.$(locator);
+        await element.waitForDisplayed({ timeout: 15000 });
+        await element.click();
+        console.log(`[Web] Clicked on order with ID: ${capturedOrderId}`);
+    }
+
+    async verify_order_details_page() {
+        const capturedOrderId = global.orderId;
+        if (!capturedOrderId) {
+            throw new Error("Order ID was not captured previously!");
+        }
+        
+        const locator = CommonLocators.dynamicOrderRow(capturedOrderId);
+        const element = await this.webDriver.$(locator);
+        await element.waitForDisplayed({ timeout: 15000 });
+        console.log(`[Web] Verified order details page is displayed for Order ID: ${capturedOrderId}`);
     }
 }

@@ -5,7 +5,8 @@ Feature: Cross-Platform Order Placement and Verification
       Given The Albaik application is launched on emulator
       Then Verify that the "Skip" text is displayed
       Then Click on "Skip" button
-      Then Click on "android:id/content" button      Then Click on "Sign In" button
+      Then Click on "android:id/content" button
+      Then Click on "Sign In" button
       Then Enter "532255875" into "5XXXXXXXX" Input
       Then Enter "11223344" as password
       Then Click on "Sign In" button
@@ -23,15 +24,29 @@ Feature: Cross-Platform Order Placement and Verification
       Then Click on "Pay with card" button
       Then wait for "180" Seconds
       Then Capture and store order id from tracking card "tracking-instore"
+      Then navigate to the web admin panel
+      Then login to the admin panel
+      Then the restaurant panel is loaded and ready
+      Then wait for "5" seconds in web
+      Then Click on web link with href "/admin/orders"
+      Then wait for "2" seconds in web
+      Then Enter captured order ID into web input with id "search"
+      Then Hit "Enter" key in web
+      Then Click on the order with captured order ID
+      Then Verify that the order details page is displayed with correct order ID
       
-
-      
-
-    # Web - Verify Order in Admin Panel
-      # Then navigate to the web admin panel
-      # Then login to the admin panel
-      # Then the restaurant panel is loaded and ready
-# Then Search captured order id in web search field "Search Order ID"
+  @web
+  Scenario: Web - Verify Order in Admin Panel
+      Then navigate to the web admin panel
+      Then login to the admin panel
+      Then the restaurant panel is loaded and ready
+      Then wait for "5" seconds in web
+      Then Click on web link with href "/admin/orders"
+      Then wait for "2" seconds in web
+      Then Enter captured order ID into web input with id "search"
+      Then Hit "Enter" key in web
+      Then Click on the order with captured order ID
+      Then Verify that the order details page is displayed with correct order ID
 
 
 @pickup
@@ -55,7 +70,7 @@ Feature: Cross-Platform Order Placement and Verification
       Then Enter "ktm" into "City, Branch" Input
       Then Hit "Enter" key
       Then Click on "KTM Test Branch" button
-      Then wait for "5" Seconds
+      Then wait for "20" Seconds
       Then Click on "Order Here" button
       Then Scroll down "2" lines
       Then Click on "Double Espresso" button
@@ -67,6 +82,16 @@ Feature: Cross-Platform Order Placement and Verification
       Then Click on "Pay with card" button
       Then wait for "180" Seconds
       Then Capture and store order id from tracking card "tracking-pickup"
+      Then navigate to the web admin panel
+      Then login to the admin panel
+      Then the restaurant panel is loaded and ready
+      Then wait for "5" seconds in web
+      Then Click on web link with href "/admin/orders"
+      Then wait for "2" seconds in web
+      Then Enter captured order ID into web input with id "search"
+      Then Hit "Enter" key in web
+      Then Click on the order with captured order ID
+      Then Verify that the order details page is displayed with correct order ID
 
 
     
@@ -75,7 +100,7 @@ Feature: Cross-Platform Order Placement and Verification
 
 
 
-    @Carpickup
+   @Carpickup
   Scenario: Place a Car pickup order on mobile
       Given The Albaik application is launched on emulator
       Then Click on "android:id/button2" button
@@ -96,8 +121,8 @@ Feature: Cross-Platform Order Placement and Verification
       Then Enter "ktm" into "City, Branch" Input
       Then Hit "Enter" key
       Then Click on "KTM Test Branch" button
-      Then wait for "5" Seconds
-      Then Click on "Bring it to my car" button
+      Then wait for "20" Seconds
+      Then Click on "bring it to my car" button
       Then Click on "Order Here" button
       Then Scroll down "2" lines
       Then Click on "Double Espresso" button
@@ -109,14 +134,14 @@ Feature: Cross-Platform Order Placement and Verification
       Then Click on "Pay with card" button
       Then wait for "180" Seconds
       Then Capture and store order id from tracking card "tracking-pickup"
-    
-    
-    
-@Carpickup
-  Scenario: Place a delivery order on mobile
-      Given The Albaik application is launched on emulator
-      Then Click on "android:id/button2" button
-      Then Click on "Saudi Arabia" button
-      Then Click on "android:id/button2" button
-      Then Click on "Delivery" button
-      Then Click on "Choose an address" button
+      Then navigate to the web admin panel
+      Then login to the admin panel
+      Then the restaurant panel is loaded and ready
+      Then wait for "5" seconds in web
+      Then Click on web link with href "/admin/orders"
+      Then wait for "2" seconds in web
+      Then Enter captured order ID into web input with id "search"
+      Then Hit "Enter" key in web
+      Then Click on the order with captured order ID
+      Then Verify that the order details page is displayed with correct order ID
+

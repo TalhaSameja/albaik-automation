@@ -1,6 +1,6 @@
 Feature: Example Web Application
 
-  @web @smoke
+  @smoke
   Scenario: Open Example.com and verify the heading
     Given the web application is open
     When the user opens the example web page
