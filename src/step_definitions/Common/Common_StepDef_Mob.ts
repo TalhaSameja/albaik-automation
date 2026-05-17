@@ -5,6 +5,9 @@ const commonFunctionPage = new CommonFunctionPage();
 
  Given(/^The Albaik application is launched(?: on emulator)?$/, async () => {
   await commonFunctionPage.waitForHomeScreen();
+  // Appium automatically launches the app during session startup.
+  // We pause briefly to let the initial UI elements (like the Skip screen) render.
+  await commonFunctionPage.wait_for_seconds(5);
 });
 
 Then('Verify that the {string} text is displayed', async (text: string) => {
@@ -15,15 +18,53 @@ Then('Click on {string} button', async (text: string) => {
   await commonFunctionPage.click_btn(text);
 });
 
-Then(/^wait for "?(\d+)"? [sS]econds?\s*$/, async (seconds: string) => {
+Then('Click on profile icon', async () => {
+  await commonFunctionPage.click_profile_icon();
+});
+
+Then(/^wait for "?(\d+)"? [sS]econds?\s*$/, { timeout: 600000 }, async (seconds: string) => {
   await commonFunctionPage.wait_for_seconds(parseInt(seconds));
 });
 
-// Then('Scan QR code from file {string}', async (fileName: string) => {
-//   await commonFunctionPage.scanQRCode(fileName);
-// });
-When('I bypass the QR scan for {string}', async (branchKey: string) => {
-    // We call the deep link method directly. 
-    // This ignores the camera and jumps straight to the store.
-    await commonFunctionPage.bypassQRWithDeepLink(branchKey);
+Then(/^Scroll down "(\d+)" lines?$/, async (lines: string) => {
+  await commonFunctionPage.scrollDownLines(parseInt(lines));
+});
+
+Then('Write {string} in the input field', async (text: string) => {
+  await commonFunctionPage.write_in_input_field(text);
+});
+
+Then('Enter {string} into {string} Input', async (text: string, inputName: string) => {
+  await commonFunctionPage.enter_text_in_input_field(text, inputName);
+});
+Then(/^Hit "([^"]*)" key$/, async (keyName: string) => {
+    await commonFunctionPage.hit_key(keyName);
+});
+Then('Enter password', async () => {
+  await commonFunctionPage.enter_password();
+});
+
+Then('Enter {string} as password', async (password: string) => {
+  await commonFunctionPage.enter_password(password);
+});
+
+Then('Select card ending with {string}', async (lastFourDigits: string) => {
+  await commonFunctionPage.select_card_ending_with(lastFourDigits);
+});
+Then(
+  'Capture and store order id from tracking card {string}',
+  async (trackingCardId: string) => {
+    await commonFunctionPage.capture_and_store_order_id(
+      trackingCardId
+    );
+  }
+);
+
+
+
+
+
+When('I redirect to branch {string} to bypass QR scan', async (branchId: string) => {
+    // Uses the Intent methodology to redirect the front-end UI
+    await commonFunctionPage.redirectToBranchViaIntent(branchId);
 });

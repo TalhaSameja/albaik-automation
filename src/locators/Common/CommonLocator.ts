@@ -94,7 +94,32 @@ export const CommonLocators = {
   refreshButton: '//button[@id="refresh"]',
     pageHeading: 'h1',
   moreInfoLink: 'a',
+  dynamicTextInput: (text: string) => `//android.widget.EditText[@text="${text}" or @resource-id="${text}"]`,
+    // Tracking Card
+  trackingCard: (resourceId: string) =>
+    `//android.view.ViewGroup[@resource-id="${resourceId}"]`,
+
+  // Dynamic Order ID inside tracking card
+  trackingOrderId: (resourceId: string) =>
+    `//android.view.ViewGroup[@resource-id="${resourceId}"]//android.widget.TextView[contains(@text,"#")]`,
+   // Dynamic Search Field on Web
+  dynamicSearchField: (placeholder: string) =>
+    `//input[@placeholder="${placeholder}"]`,
+    
+  // Dynamic Web Element Locators
+  webLinkByHref: (href: string) => `//a[@href="${href}"]`,
+  webInputById: (id: string) => `//input[@id="${id}"]`,
+  systemButton: (btn_name: string) => `//android.widget.Button[@resource-id="${btn_name}"]`,
+
+
+  // Dynamic Order Row
+  dynamicOrderRow: (orderId: string) =>
+    `//*[contains(text(),"${orderId}")]`,
   emailInput: '//input[@name="email" or @type="email"]',
-  passwordInput: '//input[@name="password" or @type="password"]',
+  webPasswordInput: '//input[@name="password" or @type="password"]',
+  passwordInput: '//android.widget.ScrollView/android.view.ViewGroup/android.view.ViewGroup[2]/android.widget.EditText',
   loginBtn: "//input[@name='commit']",
+  cardEndingWith: (lastFourDigits: string) => `//android.view.ViewGroup[@content-desc="ENDING, ${lastFourDigits}"]/com.horcrux.svg.SvgView/com.horcrux.svg.g/com.horcrux.svg.p`,
+  ChannelPicker: '//android.view.ViewGroup[@resource-id="ChannelPicker"]/android.view.ViewGroup/com.horcrux.svg.SvgView',
+  'android:id/content': '//android.widget.FrameLayout[@resource-id="android:id/content"]/android.widget.FrameLayout/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup[1]/android.view.ViewGroup/android.view.ViewGroup[1]/android.widget.FrameLayout/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup[2]/android.view.ViewGroup[4]/com.horcrux.svg.SvgView/com.horcrux.svg.g/ya1',
 };
