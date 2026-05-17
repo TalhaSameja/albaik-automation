@@ -5,6 +5,9 @@ const commonFunctionPage = new CommonFunctionPage();
 
  Given(/^The Albaik application is launched(?: on emulator)?$/, async () => {
   await commonFunctionPage.waitForHomeScreen();
+  // Appium automatically launches the app during session startup.
+  // We pause briefly to let the initial UI elements (like the Skip screen) render.
+  await commonFunctionPage.wait_for_seconds(5);
 });
 
 Then('Verify that the {string} text is displayed', async (text: string) => {
@@ -19,7 +22,7 @@ Then('Click on profile icon', async () => {
   await commonFunctionPage.click_profile_icon();
 });
 
-Then(/^wait for "?(\d+)"? [sS]econds?\s*$/, async (seconds: string) => {
+Then(/^wait for "?(\d+)"? [sS]econds?\s*$/, { timeout: 600000 }, async (seconds: string) => {
   await commonFunctionPage.wait_for_seconds(parseInt(seconds));
 });
 
@@ -34,7 +37,9 @@ Then('Write {string} in the input field', async (text: string) => {
 Then('Enter {string} into {string} Input', async (text: string, inputName: string) => {
   await commonFunctionPage.enter_text_in_input_field(text, inputName);
 });
-
+Then(/^Hit "([^"]*)" key$/, async (keyName: string) => {
+    await commonFunctionPage.hit_key(keyName);
+});
 Then('Enter password', async () => {
   await commonFunctionPage.enter_password();
 });
@@ -46,6 +51,16 @@ Then('Enter {string} as password', async (password: string) => {
 Then('Select card ending with {string}', async (lastFourDigits: string) => {
   await commonFunctionPage.select_card_ending_with(lastFourDigits);
 });
+Then(
+  'Capture and store order id from tracking card {string}',
+  async (trackingCardId: string) => {
+    await commonFunctionPage.capture_and_store_order_id(
+      trackingCardId
+    );
+  }
+);
+
+
 
 
 

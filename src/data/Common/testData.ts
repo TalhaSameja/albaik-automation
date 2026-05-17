@@ -10,7 +10,7 @@ export const qrCodeUrls: { [key: string]: string } = {
 };
 export const testData = {
   web: {
-    baseUrl: 'https://staging.ordering.albaikcloud.com/',
+    baseUrl: 'https://staging.ordering.albaikcloud.com/sign_in',
     email: 'jane.doe@albaik.com',
     password: 'Kualitatem123',
     
