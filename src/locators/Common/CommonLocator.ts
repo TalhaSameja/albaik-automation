@@ -105,6 +105,8 @@ export const CommonLocators = {
    // Dynamic Search Field on Web
   dynamicSearchField: (placeholder: string) =>
     `//input[@placeholder="${placeholder}"]`,
+  systemButton: (btn_name: string) => `//android.widget.Button[@resource-id="${btn_name}"]`,
+
 
   // Dynamic Order Row
   dynamicOrderRow: (orderId: string) =>
@@ -113,4 +115,6 @@ export const CommonLocators = {
   passwordInput: '//android.widget.ScrollView/android.view.ViewGroup/android.view.ViewGroup[2]/android.widget.EditText',
   loginBtn: "//input[@name='commit']",
   cardEndingWith: (lastFourDigits: string) => `//android.view.ViewGroup[@content-desc="ENDING, ${lastFourDigits}"]/com.horcrux.svg.SvgView/com.horcrux.svg.g/com.horcrux.svg.p`,
+  ChannelPicker: '//android.view.ViewGroup[@resource-id="ChannelPicker"]/android.view.ViewGroup/com.horcrux.svg.SvgView',
+  'android:id/content': '//android.widget.FrameLayout[@resource-id="android:id/content"]/android.widget.FrameLayout/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup[1]/android.view.ViewGroup/android.view.ViewGroup[1]/android.widget.FrameLayout/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup[2]/android.view.ViewGroup[4]/com.horcrux.svg.SvgView/com.horcrux.svg.g/ya1',
 };

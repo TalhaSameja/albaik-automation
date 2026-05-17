@@ -5,6 +5,9 @@ const commonFunctionPage = new CommonFunctionPage();
 
  Given(/^The Albaik application is launched(?: on emulator)?$/, async () => {
   await commonFunctionPage.waitForHomeScreen();
+  // Appium automatically launches the app during session startup.
+  // We pause briefly to let the initial UI elements (like the Skip screen) render.
+  await commonFunctionPage.wait_for_seconds(5);
 });
 
 Then('Verify that the {string} text is displayed', async (text: string) => {
@@ -34,7 +37,9 @@ Then('Write {string} in the input field', async (text: string) => {
 Then('Enter {string} into {string} Input', async (text: string, inputName: string) => {
   await commonFunctionPage.enter_text_in_input_field(text, inputName);
 });
-
+Then(/^Hit "([^"]*)" key$/, async (keyName: string) => {
+    await commonFunctionPage.hit_key(keyName);
+});
 Then('Enter password', async () => {
   await commonFunctionPage.enter_password();
 });

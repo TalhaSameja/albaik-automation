@@ -76,6 +76,15 @@ export class CommonFunctionPage extends BasePage {
         }
     }
 
+    // 1.5 Handle system popup buttons explicitly by resource-id (e.g., location permission "No thanks" button)
+    if (btn_name.startsWith('android:id/')) {
+        const locator = CommonLocators.systemButton(btn_name);
+        const element = await this.browserInstance.$(locator);
+        await element.waitForDisplayed({ timeout: CommonFunctionPage.DEFAULT_WAIT });
+        await element.click();
+        return;
+    }
+
     // 2. Fallback to generic text search if not mapped in locators
     const element = await this.findFirstDisplayed(
       this.buildTextSelectors(btn_name),
@@ -88,9 +97,15 @@ export class CommonFunctionPage extends BasePage {
   }
 
   async click_profile_icon() {
-    const xpath = '//android.widget.FrameLayout[@resource-id="android:id/content"]/android.widget.FrameLayout/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup[1]/android.view.ViewGroup/android.view.ViewGroup[1]/android.widget.FrameLayout/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup[1]/android.view.ViewGroup[2]/android.view.ViewGroup[3]/com.horcrux.svg.SvgView/com.horcrux.svg.g/U71';
-    const element = await this.browserInstance.$(xpath);
-    await element.waitForDisplayed({ timeout: CommonFunctionPage.DEFAULT_WAIT });
+    const xpath = '//android.widget.FrameLayout[@resource-id="android:id/content"]/android.widget.FrameLayout/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup[1]/android.view.ViewGroup/android.view.ViewGroup[1]/android.widget.FrameLayout/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup[2]/android.view.ViewGroup[3]/com.horcrux.svg.SvgView/com.horcrux.svg.g/ya1';
+    
+    // Target only the mobile emulator instance during cross-platform executions to prevent Chrome from timing out
+    const driver = (this.browserInstance as any).isMultiremote 
+      ? (this.browserInstance as any).mobile 
+      : this.browserInstance;
+      
+    const element = await driver.$(xpath);
+    await element.waitForExist({ timeout: CommonFunctionPage.DEFAULT_WAIT }); 
     await element.click();
   }
 
@@ -187,6 +202,14 @@ export class CommonFunctionPage extends BasePage {
         throw new Error(`Input field "${inputName}" not found on screen within ${CommonFunctionPage.DEFAULT_WAIT}ms`);
     }
     await element.setValue(textToEnter);
+  }
+
+  async hit_key(keyName: string) {
+    if (keyName.toLowerCase() === 'enter') {
+      await this.browserInstance.keys(['Enter']);
+    } else {
+      await this.browserInstance.keys([keyName]);
+    }
   }
 
   async select_card_ending_with(lastFourDigits: string) {
