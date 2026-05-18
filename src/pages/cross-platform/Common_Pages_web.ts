@@ -137,4 +137,13 @@ export class CommonWebPage {
         await element.waitForDisplayed({ timeout: 15000 });
         console.log(`[Web] Verified order details page is displayed for Order ID: ${capturedOrderId}`);
     }
+
+    async accept_web_alert() {
+        try {
+            await this.webDriver.acceptAlert();
+            console.log(`[Web] Accepted web alert`);
+        } catch (e) {
+            console.log(`[Web] No alert to accept or failed to accept alert: ${e}`);
+        }
+    }
 }

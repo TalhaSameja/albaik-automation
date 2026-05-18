@@ -56,7 +56,7 @@ const stepDefinitionFiles = isCrossPlatform
 
   : isWeb
 
-  ? [
+   ? [
       './src/step_definitions/Common/Common_StepDef_Web.ts',
       './src/step_definitions/web/**/*.ts',
       './src/step_definitions/cross-platform/**/*.ts'
@@ -278,7 +278,6 @@ export const config: WebdriverIO.Config = {
 
     ignoreUndefinedDefinitions: false,
 
-    retry: 1,
 
   },
 

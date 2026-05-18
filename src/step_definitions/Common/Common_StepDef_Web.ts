@@ -52,3 +52,7 @@ Then(/^Click on the order with captured order ID$/, async () => {
 Then(/^Verify that the order details page is displayed with correct order ID$/, async () => {
     await commonWebPage.verify_order_details_page();
 });
+
+Then(/^accept web alert$/, async () => {
+    await commonWebPage.accept_web_alert();
+});

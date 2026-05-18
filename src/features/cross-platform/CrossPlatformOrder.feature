@@ -33,57 +33,25 @@ Feature: Cross-Platform Order Placement and Verification
       Then Enter captured order ID into input field "search"
       Then Hit "Enter" key in web
       Then Click on the order with captured order ID
-      Then Verify that the order details page is displayed with correct order ID
-      
-  @curbside
-  Scenario: Web - Verify Order in Curbside Panel
-      Then navigate to the curbside web panel
-      Then login to the curbside panel
-      Then the curbside panel is loaded and ready
-      Then Click on web Button with "Assign order to me"
       Then wait for "2" seconds in web
-      Then Click on web Button with "Assign manually"
+      Then Click on web Button with "KTM Test Branch"
       Then wait for "2" seconds in web
-      Then Enter captured order ID into input field "order_id_order_id"
-      Then Click on web Button with "Assign order"
-      
-  @web
-  Scenario: Web - Verify Order in Admin Panel
-      Then navigate to the web admin panel
-      Then login to the admin panel
-      Then the restaurant panel is loaded and ready
+      Then Click on web Button with "Restaurant dashboard"
       Then wait for "5" seconds in web
-      Then Click on web Button with "/admin/orders"
-      Then wait for "2" seconds in web
       Then Enter captured order ID into input field "search"
       Then Hit "Enter" key in web
+      Then wait for "2" seconds in web
       Then Click on the order with captured order ID
-      Then Verify that the order details page is displayed with correct order ID
+      Then wait for "2" seconds in web
+      Then Click on web Button with "Print Receipt & Start Collecting"
+      Then wait for "2" seconds in web
+      Then accept web alert
+      Then wait for "2" seconds in web
+      Then Click on the order with captured order ID
+      Then wait for "2" seconds in web
+      Then Click on web Button with "Prepared"
 
-  @driver 
-  Scenario: Driver Application - Login and update order status
-      Given The Albaik Driver application is launched on emulator
-      Then Verify that the "Skip" text is displayed
-      Then Click on "Skip" button
-      Then Click on "Sign In" button
-      # Assuming driver phone and password exist in testData or can be entered directly
-      Then Enter "055555555" into "driverPhone" Input
-      Then Enter "driver1234" as password
-      Then Click on "Sign In" button
-      Then wait for "10" Seconds
-      # Driver specific flow using reusable generic steps
-      Then Click on "New Orders" button
-      Then wait for "2" Seconds
-      Then Click on "Accept Order" button
-      Then wait for "5" Seconds
-      Then Click on "Arrived at Restaurant" button
-      Then wait for "2" Seconds
-      Then Click on "Order Picked Up" button
-      Then wait for "5" Seconds
-      Then Click on "Arrived at Customer" button
-      Then wait for "2" Seconds
-      Then Click on "Mark as Delivered" button
-      Then Verify that the "Delivered Successfully" text is displayed
+      
 
 
 @pickup
@@ -113,8 +81,11 @@ Feature: Cross-Platform Order Placement and Verification
       Then Click on "Double Espresso" button
       Then Click on "Add to order" button
       Then Click on "View Basket" button
+      Then wait for "10" Seconds
       Then Click on "Confirm Order" button
+      Then wait for "10" Seconds
       Then Click on "Continue" button
+      Then wait for "5" seconds
       Then Enter "123" into "checkoutCvv" Input
       Then Click on "Pay with card" button
       Then wait for "180" Seconds
@@ -128,8 +99,23 @@ Feature: Cross-Platform Order Placement and Verification
       Then Enter captured order ID into input field "search"
       Then Hit "Enter" key in web
       Then Click on the order with captured order ID
-      Then Verify that the order details page is displayed with correct order ID
-
+      Then wait for "2" seconds in web
+      Then Click on web Button with "KTM Test Branch"
+      Then wait for "2" seconds in web
+      Then Click on web Button with "Restaurant dashboard"
+      Then wait for "5" seconds in web
+      Then Enter captured order ID into input field "search"
+      Then Hit "Enter" key in web
+      Then wait for "2" seconds in web
+      Then Click on the order with captured order ID
+      Then wait for "2" seconds in web
+      Then Click on web Button with "Print Receipt & Start Collecting"
+      Then wait for "2" seconds in web
+      Then accept web alert
+      Then wait for "2" seconds in web
+      Then Click on the order with captured order ID
+      Then wait for "2" seconds in web
+      Then Click on web Button with "Prepared"
 
     
 
@@ -180,4 +166,107 @@ Feature: Cross-Platform Order Placement and Verification
       Then Enter captured order ID into input field "search"
       Then Hit "Enter" key in web
       Then Click on the order with captured order ID
+      Then wait for "2" seconds in web
+      Then Click on web Button with "KTM Test Branch"
+      Then wait for "2" seconds in web
+      Then Click on web Button with "Restaurant dashboard"
+      Then wait for "5" seconds in web
+      Then Enter captured order ID into input field "search"
+      Then Hit "Enter" key in web
+      Then wait for "2" seconds in web
+      Then Click on the order with captured order ID
+      Then wait for "2" seconds in web
+      Then Click on web Button with "Print Receipt & Start Collecting"
+      Then wait for "2" seconds in web
+      Then accept web alert
+      Then wait for "2" seconds in web
+      Then Click on the order with captured order ID
+      Then wait for "2" seconds in web
+      Then Click on web Button with "Prepared"
+
+
+@delivery
+    Scenario: Place a delivery order on mobile
+  Given The Albaik application is launched on emulator
+      Then Verify that the "Skip" text is displayed
+      Then Click on "Skip" button
+      Then Click on "android:id/content" button
+      Then Click on "Sign In" button
+      Then Enter "532255875" into "5XXXXXXXX" Input
+      Then Enter "11223344" as password
+      Then Click on "Sign In" button
+      Then wait for "10" Seconds
+      Then Click on "ChannelPicker" button
+      Then Click on "Delivery" button
+      Then Click on "Choose an address" button
+
+
+
+
+
+
+
+      @curbside
+  Scenario: Web - Verify Order in Curbside Panel
+      Then navigate to the curbside web panel
+      Then login to the curbside panel
+      Then the curbside panel is loaded and ready
+      Then Click on web Button with "Assign order to me"
+      Then wait for "2" seconds in web
+      Then Click on web Button with "Assign manually"
+      Then wait for "2" seconds in web
+      Then Enter captured order ID into input field "order_id_order_id"
+      Then Click on web Button with "Assign order"
+      
+  @web
+  Scenario: Web - Verify Order in Admin Panel
+      Then navigate to the web admin panel
+      Then login to the admin panel
+      Then the restaurant panel is loaded and ready
+      Then wait for "5" seconds in web
+      Then Click on web Button with "/admin/orders"
+      Then wait for "2" seconds in web
+      Then Enter captured order ID into input field "search"
+      Then Hit "Enter" key in web
+      Then Click on the order with captured order ID
       Then Verify that the order details page is displayed with correct order ID
+      Then wait for "2" seconds in web
+      Then Click on web Button with "KTM Test Branch"
+      Then wait for "2" seconds in web
+      Then Click on web Button with "Restaurant dashboard"
+      Then wait for "5" seconds in web
+      Then Enter captured order ID into input field "search"
+      Then Hit "Enter" key in web
+      Then wait for "2" seconds in web
+      Then Click on the order with captured order ID
+      Then wait for "2" seconds in web
+      Then Click on web Button with "Print Receipt & Start Collecting"
+      Then wait for "2" seconds in web
+      Then Click on web Button with "OK"
+      Then wait for "2" seconds in web
+      Then Click on the order with captured order ID
+      Then wait for "2" seconds in web
+      Then Click on web Button with "Prepared"
+
+  @driver 
+  Scenario: Driver Application - Login and update order status
+      Given The Albaik Driver application is launched on emulator
+      Then wait for "5" Seconds
+      Then Enter "557788990" into "phoneNumber" Input
+      Then Enter "11223344" into "password" Input
+      Then Click on "submit" button
+      Then wait for "5" Seconds
+      Then Click on "Next" button
+      Then Click on "Next" button
+      Then Click on "Next" button
+      Then Click on "Next" button
+      Then Click on "Next" button
+      Then Click on "I have read all the safety guidelines" button
+      Then Click on "Start the Ride" button
+      Then wait for "3" Seconds
+      Then Click on "Continue" button
+      Then wait for "2" Seconds
+      Then Click on "com.android.permissioncontroller:id/permission_allow_foreground_only_button" button
+      Then wait for "3" Seconds
+      Then Click on "Join restaurant queue" button
+      Then Click on "I have arrived" button

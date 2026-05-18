@@ -9,12 +9,14 @@ const commonFunctionPage = new CommonFunctionPage();
   // We pause briefly to let the initial UI elements (like the Skip screen) render.
   await commonFunctionPage.wait_for_seconds(5);
 });
-
-Given(/^The Albaik Driver application is launched on emulator$/, async () => {
-    // This calls the method we added to Common_Pages_Mob.ts
-    // to switch the emulator to the driver app package via Appium
-    await commonFunctionPage.launchDriverApplication();
+Given(/^The Albaik Driver application is launched(?: on emulator)?$/, async () => {
+  await commonFunctionPage.launchDriverApplication();
+  // Appium automatically launches the app during session startup.
+  // We pause briefly to let the initial UI elements (like the Skip screen) render.
+  await commonFunctionPage.wait_for_seconds(5);
 });
+
+
 
 Then('Verify that the {string} text is displayed', async (text: string) => {
   await commonFunctionPage.verify_txt(text);
