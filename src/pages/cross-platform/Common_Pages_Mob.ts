@@ -4,6 +4,7 @@ import { qrCodeUrls } from '../../data/Common/testData';
 import { testData } from '../../data/Common/testData';
 import * as QRCode from 'qrcode';
 import * as fs from 'fs';
+import { execSync } from 'child_process';
 import * as path from 'path';
 import { Gestures } from '../../utils/gestures';
 
@@ -12,8 +13,36 @@ export class CommonFunctionPage extends BasePage {
   private static readonly DEFAULT_WAIT = 60000;
   private bottomSheetAnchor = CommonLocators.bottomSheetAnchor;
 
+  // /**
+  //  * Brings the Android Emulator window to the front of the screen (macOS specific)
+  //  */
+  // private bringEmulatorToFront() {
+  //   if (process.platform === 'darwin') {
+  //       try {
+  //           // macOS usually identifies the Android emulator bundle natively as "Emulator"
+  //           execSync(`osascript -e 'tell application "Emulator" to activate'`);
+  //       } catch (e) {
+  //           try {
+  //               // Fallback: bring any process utilizing "qemu" (the emulator engine) to the front
+  //               execSync(`osascript -e 'tell application "System Events" to set frontmost of every process whose name contains "qemu" to true'`);
+  //           } catch (err) {}
+  //       }
+  //   }
+  // }
+
   async waitForHomeScreen(): Promise<void> {
+    // this.bringEmulatorToFront();
     await this.waitForElement(this.bottomSheetAnchor, CommonFunctionPage.DEFAULT_WAIT);
+  }
+
+  async launchDriverApplication(): Promise<void> {
+    // Specify the driver app package here, or pull it from a new .env variable
+    const driverPkg = process.env.DRIVER_APP_PACKAGE || 'com.albaikdriver';
+    const driver = (this.browserInstance as any).isMultiremote 
+      ? (this.browserInstance as any).mobile 
+      : this.browserInstance;
+      
+    await driver.activateApp(driverPkg);
   }
 
   private buildTextSelectors(text: string): string[] {

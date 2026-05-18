@@ -17,15 +17,27 @@ Then(/^the restaurant panel is loaded and ready$/, async () => {
     await commonWebPage.waitForRestaurantPanel();
 });
 
+Then(/^navigate to the curbside web panel$/, async () => {
+    await commonWebPage.navigateToCurbsidePanel();
+});
+
+Then(/^login to the curbside panel$/, async () => {
+    await commonWebPage.loginToCurbside();
+});
+
+Then(/^the curbside panel is loaded and ready$/, async () => {
+    await commonWebPage.waitForCurbsidePanel();
+});
+
 Then(/^wait for "(\d+)" seconds in web$/, async (seconds: string) => {
     await commonWebPage.wait_for_seconds_web(parseInt(seconds));
 });
 
-Then(/^Click on web link with href "([^"]*)"$/, async (href: string) => {
+Then(/^Click on web Button with "([^"]*)"$/, async (href: string) => {
     await commonWebPage.click_web_link_by_href(href);
 });
 
-Then(/^Enter captured order ID into web input with id "([^"]*)"$/, async (id: string) => {
+Then(/^Enter captured order ID into input field "([^"]*)"$/, async (id: string) => {
     await commonWebPage.enter_captured_order_id_by_id(id);
 });
 

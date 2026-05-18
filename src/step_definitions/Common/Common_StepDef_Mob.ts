@@ -10,6 +10,12 @@ const commonFunctionPage = new CommonFunctionPage();
   await commonFunctionPage.wait_for_seconds(5);
 });
 
+Given(/^The Albaik Driver application is launched on emulator$/, async () => {
+    // This calls the method we added to Common_Pages_Mob.ts
+    // to switch the emulator to the driver app package via Appium
+    await commonFunctionPage.launchDriverApplication();
+});
+
 Then('Verify that the {string} text is displayed', async (text: string) => {
   await commonFunctionPage.verify_txt(text);
 });

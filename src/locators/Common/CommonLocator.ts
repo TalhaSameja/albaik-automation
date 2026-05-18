@@ -107,7 +107,14 @@ export const CommonLocators = {
     `//input[@placeholder="${placeholder}"]`,
     
   // Dynamic Web Element Locators
-  webLinkByHref: (href: string) => `//a[@href="${href}"]`,
+  webLinkByHref: (href: string) => {
+    const predefined: { [key: string]: string } = {
+      'Assign order to me': "//a[normalize-space()='Assign order to me']",
+      'Assign manually': "//a[normalize-space()='Assign manually']",
+      'Assign order': "//input[@name='commit']"
+    };
+    return predefined[href] || `//a[@href="${href}"]`;
+  },
   webInputById: (id: string) => `//input[@id="${id}"]`,
   systemButton: (btn_name: string) => `//android.widget.Button[@resource-id="${btn_name}"]`,
 
@@ -116,6 +123,7 @@ export const CommonLocators = {
   dynamicOrderRow: (orderId: string) =>
     `//*[contains(text(),"${orderId}")]`,
   emailInput: '//input[@name="email" or @type="email"]',
+  curbsidePhoneInput: '//input[@type="tel" or contains(@name, "phone") or @id="user_phone" or @name="email" or @type="email" or @id="user_login"]',
   webPasswordInput: '//input[@name="password" or @type="password"]',
   passwordInput: '//android.widget.ScrollView/android.view.ViewGroup/android.view.ViewGroup[2]/android.widget.EditText',
   loginBtn: "//input[@name='commit']",
