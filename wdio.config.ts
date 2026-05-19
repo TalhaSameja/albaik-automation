@@ -26,9 +26,10 @@ process.env.ANDROID_SDK_ROOT = process.env.ANDROID_SDK_ROOT || process.env.ANDRO
 const TEST_PLATFORM = process.env.TEST_PLATFORM?.toLowerCase() || 'mobile';
 const isCrossPlatform = TEST_PLATFORM === 'cross-platform';
 const isDualMobile = TEST_PLATFORM === 'dual-mobile';
+const isFullDelivery = TEST_PLATFORM === 'full-delivery';
 const isWeb = TEST_PLATFORM === 'web';
 
-const testSpecs = isDualMobile
+const testSpecs = (isDualMobile || isFullDelivery)
   ? ['./src/features/cross-platform/**/*.feature']
   : isCrossPlatform
   ? ['./src/features/cross-platform/**/*.feature', './src/features/web/**/*.feature', './src/features/mobile/**/*.feature']
@@ -36,10 +37,12 @@ const testSpecs = isDualMobile
   ? ['./src/features/web/**/*.feature', './src/features/cross-platform/**/*.feature']
   : ['./src/features/mobile/**/*.feature'];
 
-const stepDefinitionFiles = isDualMobile
+const stepDefinitionFiles = (isDualMobile || isFullDelivery)
   ? [
       './src/step_definitions/Common/Common_StepDef_Mob.ts',
+      './src/step_definitions/Common/Common_StepDef_web.ts',
       './src/step_definitions/mobile/*.ts',
+      './src/step_definitions/web/*.ts',
       './src/step_definitions/cross-platform/**/*.ts',
     ]
   : isCrossPlatform
@@ -101,7 +104,31 @@ export const config: WebdriverIO.Config = {
 
 
 
-  capabilities: (isDualMobile
+  capabilities: (isFullDelivery
+
+    ? {
+
+        customerApp: {
+
+          capabilities: getCapabilities('customer'),
+
+        },
+
+        web: {
+
+          capabilities: getCapabilities('web'),
+
+        },
+
+        driverApp: {
+
+          capabilities: getCapabilities('driver'),
+
+        },
+
+      }
+
+    : isDualMobile
 
     ? {
 

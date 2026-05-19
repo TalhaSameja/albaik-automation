@@ -2,7 +2,7 @@ Feature: Cross-Platform Order Placement and Verification
 
   @scan
   Scenario: Place order on mobile and verify on web admin panel for demo purpose
-      Given The Albaik application is launched on emulator
+      Given The Albaik application is launched on physical device
       Then Verify that the "Skip" text is displayed
       Then Click on "Skip" button
       Then Click on "android:id/content" button
@@ -66,7 +66,7 @@ Feature: Cross-Platform Order Placement and Verification
 
 @pickup
   Scenario: Place a pickup order on mobile
-      Given The Albaik application is launched on emulator
+      Given The Albaik application is launched on physical device
       Then Click on "android:id/button2" button
       Then Click on "Saudi Arabia" button
       Then Click on "android:id/button2" button
@@ -135,7 +135,7 @@ Feature: Cross-Platform Order Placement and Verification
 
 @Carpickup
   Scenario: Place a Car pickup order on mobile
-      Given The Albaik application is launched on emulator
+      Given The Albaik application is launched on physical device
       Then Click on "android:id/button2" button
       Then Click on "Saudi Arabia" button
       Then Click on "android:id/button2" button
@@ -197,8 +197,8 @@ Feature: Cross-Platform Order Placement and Verification
 
 
 @delivery
-    Scenario: Place a delivery order on mobile
-  Given The Albaik application is launched on emulator
+    Scenario: Place a delivery order on mobile, process via admin panel, and deliver via driver app
+  Given The Albaik application is launched on physical device
       Then Verify that the "Skip" text is displayed
       Then Click on "Skip" button
       Then Click on "android:id/content" button
@@ -250,6 +250,19 @@ Feature: Cross-Platform Order Placement and Verification
       Then Click on the order with captured order ID
       Then wait for "2" seconds in web
       Then Click on web Button with "Prepared"
+      Given The Albaik Driver application is launched on emulator
+      Then wait for "5" Seconds
+      Then Click on "1" button
+      Then Click on "Scan receipt" button
+      Then Click on "Enter order number" button
+      Then Enter captured order ID into "receipt number" Input
+      Then Click on "Submit" button
+      Then wait for "5" Seconds
+      Then Click on "Start delivering" button
+      Then wait for "5" Seconds
+      Then Click on "Delivered" button
+      Then wait for "5" Seconds
+      Then Click on "Delivered" button
 
 
 

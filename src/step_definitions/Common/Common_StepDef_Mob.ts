@@ -3,16 +3,28 @@ import {CommonFunctionPage} from '../../pages/cross-platform/Common_Pages_Mob';
 
 const commonFunctionPage = new CommonFunctionPage(); 
 
- Given(/^The Albaik application is launched(?: on emulator)?$/, async () => {
+ Given('The Albaik application is launched', async () => {
   await commonFunctionPage.waitForHomeScreen();
-  // Appium automatically launches the app during session startup.
-  // We pause briefly to let the initial UI elements (like the Skip screen) render.
   await commonFunctionPage.wait_for_seconds(5);
 });
-Given(/^The Albaik Driver application is launched(?: on emulator)?$/, async () => {
+Given('The Albaik application is launched on emulator', async () => {
+  await commonFunctionPage.waitForHomeScreen();
+  await commonFunctionPage.wait_for_seconds(5);
+});
+Given('The Albaik application is launched on physical device', async () => {
+  await commonFunctionPage.waitForHomeScreen();
+  await commonFunctionPage.wait_for_seconds(5);
+});
+Given('The Albaik Driver application is launched', async () => {
   await commonFunctionPage.launchDriverApplication();
-  // Appium automatically launches the app during session startup.
-  // We pause briefly to let the initial UI elements (like the Skip screen) render.
+  await commonFunctionPage.wait_for_seconds(5);
+});
+Given('The Albaik Driver application is launched on emulator', async () => {
+  await commonFunctionPage.launchDriverApplication();
+  await commonFunctionPage.wait_for_seconds(5);
+});
+Given('The Albaik Driver application is launched on physical device', async () => {
+  await commonFunctionPage.launchDriverApplication();
   await commonFunctionPage.wait_for_seconds(5);
 });
 
