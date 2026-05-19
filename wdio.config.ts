@@ -4,6 +4,8 @@ import { config as dotenvConfig } from 'dotenv';
 
 import { execSync } from 'child_process';
 
+import fs from 'fs';
+
 import path from 'path';
 
 import AllureReporter from '@wdio/allure-reporter';
@@ -56,7 +58,7 @@ const stepDefinitionFiles = isCrossPlatform
 
   : isWeb
 
-  ? [
+   ? [
       './src/step_definitions/Common/Common_StepDef_Web.ts',
       './src/step_definitions/web/**/*.ts',
       './src/step_definitions/cross-platform/**/*.ts'
@@ -96,11 +98,14 @@ export const config: WebdriverIO.Config = {
 
 
 
-  exclude: [],
+   exclude: [
+    './src/features/web/ExampleWeb.feature',
+    './src/features/mobile/ExampleSettings.feature'
+  ],
 
 
 
-  maxInstances: isCrossPlatform ? 2 : 1,
+ maxInstances: isCrossPlatform ? 2 : 1,
 
 
 
@@ -126,15 +131,26 @@ export const config: WebdriverIO.Config = {
 
 
 
+
   logLevel: 'error',
 
-
+  onPrepare: function () {
+    const allureResultsPath = path.join(process.cwd(), 'allure-results');
+    const allureReportPath = path.join(process.cwd(), 'allure-report');
+    
+    if (fs.existsSync(allureResultsPath)) {
+      fs.rmSync(allureResultsPath, { recursive: true, force: true });
+      console.log('🧹 Cleared old allure-results directory for the latest run.');
+    }
+    if (fs.existsSync(allureReportPath)) {
+      fs.rmSync(allureReportPath, { recursive: true, force: true });
+    }
+  },
 
   bail: 0,
 
-
-
   waitforTimeout: 30000,
+
 
 
 
@@ -278,7 +294,6 @@ export const config: WebdriverIO.Config = {
 
     ignoreUndefinedDefinitions: false,
 
-    retry: 1,
 
   },
 

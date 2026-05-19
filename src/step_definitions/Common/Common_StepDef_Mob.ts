@@ -9,12 +9,14 @@ const commonFunctionPage = new CommonFunctionPage();
   // We pause briefly to let the initial UI elements (like the Skip screen) render.
   await commonFunctionPage.wait_for_seconds(5);
 });
-
-Given(/^The Albaik Driver application is launched on emulator$/, async () => {
-    // This calls the method we added to Common_Pages_Mob.ts
-    // to switch the emulator to the driver app package via Appium
-    await commonFunctionPage.launchDriverApplication();
+Given(/^The Albaik Driver application is launched(?: on emulator)?$/, async () => {
+  await commonFunctionPage.launchDriverApplication();
+  // Appium automatically launches the app during session startup.
+  // We pause briefly to let the initial UI elements (like the Skip screen) render.
+  await commonFunctionPage.wait_for_seconds(5);
 });
+
+
 
 Then('Verify that the {string} text is displayed', async (text: string) => {
   await commonFunctionPage.verify_txt(text);
@@ -36,6 +38,10 @@ Then(/^Scroll down "(\d+)" lines?$/, async (lines: string) => {
   await commonFunctionPage.scrollDownLines(parseInt(lines));
 });
 
+Then(/^Swipe left "(\d+)" times?$/, async (times: string) => {
+  await commonFunctionPage.swipeLeft(parseInt(times));
+});
+
 Then('Write {string} in the input field', async (text: string) => {
   await commonFunctionPage.write_in_input_field(text);
 });
@@ -43,6 +49,11 @@ Then('Write {string} in the input field', async (text: string) => {
 Then('Enter {string} into {string} Input', async (text: string, inputName: string) => {
   await commonFunctionPage.enter_text_in_input_field(text, inputName);
 });
+
+Then('Enter captured order ID into {string} Input', async (inputName: string) => {
+  await commonFunctionPage.enter_captured_order_id_in_input_field(inputName);
+});
+
 Then(/^Hit "([^"]*)" key$/, async (keyName: string) => {
     await commonFunctionPage.hit_key(keyName);
 });

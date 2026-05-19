@@ -200,6 +200,41 @@ export class CommonFunctionPage extends BasePage {
     }
   }
 }
+
+  async swipeLeft(times: number) {
+    const { width, height } = await this.browserInstance.getWindowRect();
+
+    // Swipe near the bottom (75% of screen height) to ensure we interact with the cards below
+    const startY = Math.floor(height * 0.75);
+
+    // Start near right edge and move left
+    const startX = Math.floor(width * 0.80);
+    const endX = Math.floor(width * 0.20);
+
+    for (let i = 0; i < times; i++) {
+      try {
+        await this.browserInstance.performActions([
+          {
+            type: 'pointer',
+            id: 'finger1',
+            parameters: { pointerType: 'touch' },
+            actions: [
+              { type: 'pointerMove', duration: 0, x: startX, y: startY },
+              { type: 'pointerDown', button: 0 },
+              { type: 'pause', duration: 300 },
+              { type: 'pointerMove', duration: 800, x: endX, y: startY },
+              { type: 'pointerUp', button: 0 }
+            ]
+          }
+        ]);
+        await this.browserInstance.releaseActions();
+        await this.browserInstance.pause(1000);
+      } catch (error) {
+        console.log('Swipe left failed:', error);
+      }
+    }
+  }
+
   async write_in_input_field(text: string) {
     await this.browserInstance.keys(text);
   }
@@ -231,6 +266,14 @@ export class CommonFunctionPage extends BasePage {
         throw new Error(`Input field "${inputName}" not found on screen within ${CommonFunctionPage.DEFAULT_WAIT}ms`);
     }
     await element.setValue(textToEnter);
+  }
+
+  async enter_captured_order_id_in_input_field(inputName: string) {
+    const capturedOrderId = global.orderId;
+    if (!capturedOrderId) {
+        throw new Error("Order ID was not captured previously!");
+    }
+    await this.enter_text_in_input_field(capturedOrderId, inputName);
   }
 
   async hit_key(keyName: string) {
