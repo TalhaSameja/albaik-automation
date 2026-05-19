@@ -31,17 +31,27 @@ export class CommonFunctionPage extends BasePage {
   // }
 
   async waitForHomeScreen(): Promise<void> {
-    // this.bringEmulatorToFront();
+    // In dual-mobile mode, set context to the customer app session
+    if (browser.isMultiremote && (global as any).customerApp) {
+      (global as any)._mobileContext = 'customerApp';
+    }
     await this.waitForElement(this.bottomSheetAnchor, CommonFunctionPage.DEFAULT_WAIT);
   }
 
   async launchDriverApplication(): Promise<void> {
-    // Specify the driver app package here, or pull it from a new .env variable
     const driverPkg = process.env.DRIVER_APP_PACKAGE || 'com.albaikdriver';
-    const driver = (this.browserInstance as any).isMultiremote 
-      ? (this.browserInstance as any).mobile 
+
+    if (browser.isMultiremote && (global as any).driverApp) {
+      // dual-mobile: switch context to the separate driver device session
+      (global as any)._mobileContext = 'driverApp';
+      await (global as any).driverApp.activateApp(driverPkg);
+      return;
+    }
+
+    // cross-platform or single device: activate driver app on same device
+    const driver = (this.browserInstance as any).isMultiremote
+      ? (this.browserInstance as any).mobile
       : this.browserInstance;
-      
     await driver.activateApp(driverPkg);
   }
 

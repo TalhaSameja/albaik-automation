@@ -42,7 +42,6 @@ Feature: Cross-Platform Order Placement and Verification
       Then Hit "Enter" key in web
       Then wait for "2" seconds in web
       Then Click on the order with captured order ID
-<<<<<<< HEAD
       Then Verify that the order details page is displayed with correct order ID
       Then wait for "2" seconds in web
       Then Click on web Button with "KTM Test Branch"
@@ -53,8 +52,6 @@ Feature: Cross-Platform Order Placement and Verification
       Then Hit "Enter" key in web
       Then wait for "2" seconds in web
       Then Click on the order with captured order ID
-=======
->>>>>>> f80314649b24bf8447303782f68e5f5eb12d0231
       Then wait for "2" seconds in web
       Then Click on web Button with "Print Receipt & Start Collecting"
       Then wait for "2" seconds in web

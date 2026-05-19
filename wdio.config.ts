@@ -19,51 +19,43 @@ dotenvConfig();
 
 
 // Ensure ANDROID_SDK_ROOT is set — Appium requires it even when ANDROID_HOME is set
-
 process.env.ANDROID_SDK_ROOT = process.env.ANDROID_SDK_ROOT || process.env.ANDROID_HOME;
 
 
 
 const TEST_PLATFORM = process.env.TEST_PLATFORM?.toLowerCase() || 'mobile';
-
 const isCrossPlatform = TEST_PLATFORM === 'cross-platform';
-
+const isDualMobile = TEST_PLATFORM === 'dual-mobile';
 const isWeb = TEST_PLATFORM === 'web';
 
-const testSpecs = isCrossPlatform
-
+const testSpecs = isDualMobile
+  ? ['./src/features/cross-platform/**/*.feature']
+  : isCrossPlatform
   ? ['./src/features/cross-platform/**/*.feature', './src/features/web/**/*.feature', './src/features/mobile/**/*.feature']
-
   : isWeb
-
   ? ['./src/features/web/**/*.feature', './src/features/cross-platform/**/*.feature']
-
   : ['./src/features/mobile/**/*.feature'];
 
-const stepDefinitionFiles = isCrossPlatform
-
+const stepDefinitionFiles = isDualMobile
   ? [
-
-    './src/step_definitions/Common/Common_StepDef_Mob.ts',
-
-    './src/step_definitions/Common/Common_StepDef_web.ts',
-
-    './src/step_definitions/mobile/*.ts',
-
-    './src/step_definitions/web/*.ts',
-
-    './src/step_definitions/cross-platform/**/*.ts',
-
-  ]
-
+      './src/step_definitions/Common/Common_StepDef_Mob.ts',
+      './src/step_definitions/mobile/*.ts',
+      './src/step_definitions/cross-platform/**/*.ts',
+    ]
+  : isCrossPlatform
+  ? [
+      './src/step_definitions/Common/Common_StepDef_Mob.ts',
+      './src/step_definitions/Common/Common_StepDef_web.ts',
+      './src/step_definitions/mobile/*.ts',
+      './src/step_definitions/web/*.ts',
+      './src/step_definitions/cross-platform/**/*.ts',
+    ]
   : isWeb
-
-   ? [
+  ? [
       './src/step_definitions/Common/Common_StepDef_Web.ts',
       './src/step_definitions/web/**/*.ts',
-      './src/step_definitions/cross-platform/**/*.ts'
+      './src/step_definitions/cross-platform/**/*.ts',
     ]
-
   : ['./src/step_definitions/mobile/SettingsSteps.ts', './src/step_definitions/mobile/AlbaikHomeSteps.ts'];
 
 
@@ -105,11 +97,29 @@ export const config: WebdriverIO.Config = {
 
 
 
- maxInstances: isCrossPlatform ? 2 : 1,
+ maxInstances: (isCrossPlatform || isDualMobile) ? 2 : 1,
 
 
 
-  capabilities: (isCrossPlatform
+  capabilities: (isDualMobile
+
+    ? {
+
+        customerApp: {
+
+          capabilities: getCapabilities('customer'),
+
+        },
+
+        driverApp: {
+
+          capabilities: getCapabilities('driver'),
+
+        },
+
+      }
+
+    : isCrossPlatform
 
     ? {
 
@@ -137,7 +147,7 @@ export const config: WebdriverIO.Config = {
   onPrepare: function () {
     const allureResultsPath = path.join(process.cwd(), 'allure-results');
     const allureReportPath = path.join(process.cwd(), 'allure-report');
-    
+
     if (fs.existsSync(allureResultsPath)) {
       fs.rmSync(allureResultsPath, { recursive: true, force: true });
       console.log('🧹 Cleared old allure-results directory for the latest run.');

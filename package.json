@@ -19,6 +19,8 @@
     "test:web:edge:dev": "cross-env TEST_PLATFORM=web BROWSER=edge ENV=dev wdio run wdio.config.ts",
     "test:web:edge:staging": "cross-env TEST_PLATFORM=web BROWSER=edge ENV=staging wdio run wdio.config.ts",
     "test:web:edge:prod": "cross-env TEST_PLATFORM=web BROWSER=edge ENV=prod wdio run wdio.config.ts",
+    "test:dual-mobile": "cross-env TEST_PLATFORM=dual-mobile wdio run wdio.config.ts",
+    "test:dual-mobile:staging": "cross-env TEST_PLATFORM=dual-mobile ENV=staging wdio run wdio.config.ts",
     "test:cross-platform": "cross-env TEST_PLATFORM=cross-platform wdio run wdio.config.ts",
     "test:cross-platform:dev": "cross-env TEST_PLATFORM=cross-platform ENV=dev wdio run wdio.config.ts",
     "test:cross-platform:staging": "cross-env TEST_PLATFORM=cross-platform ENV=staging wdio run wdio.config.ts",
