@@ -106,12 +106,16 @@ export const CommonLocators = {
   dynamicSearchField: (placeholder: string) =>
     `//input[@placeholder="${placeholder}"]`,
     
-  // Dynamic Web Element Locators
   webLinkByHref: (href: string) => {
     const predefined: { [key: string]: string } = {
       'Assign order to me': "//a[normalize-space()='Assign order to me']",
       'Assign manually': "//a[normalize-space()='Assign manually']",
-      'Assign order': "//input[@name='commit']"
+      'Assign order': "//input[@name='commit']",
+      'KTM Test Branch': "//a[normalize-space()='KTM Test Branch']",
+      'Restaurant dashboard': "//a[normalize-space()='Restaurant dashboard']",
+      'Print Receipt & Start Collecting': "//button[normalize-space()='Print Receipt & Start Collecting']",
+      'OK': "//button[normalize-space()='OK']",
+      'Prepared': "//button[normalize-space()='Prepared']"
     };
     return predefined[href] || `//a[@href="${href}"]`;
   },

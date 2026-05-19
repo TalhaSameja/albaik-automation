@@ -59,6 +59,23 @@ Feature: Cross-Platform Order Placement and Verification
       Then Hit "Enter" key in web
       Then Click on the order with captured order ID
       Then Verify that the order details page is displayed with correct order ID
+      Then wait for "2" seconds in web
+      Then Click on web Button with "KTM Test Branch"
+      Then wait for "2" seconds in web
+      Then Click on web Button with "Restaurant dashboard"
+      Then wait for "5" seconds in web
+      Then Enter captured order ID into input field "search"
+      Then Hit "Enter" key in web
+      Then wait for "2" seconds in web
+      Then Click on the order with captured order ID
+      Then wait for "2" seconds in web
+      Then Click on web Button with "Print Receipt & Start Collecting"
+      Then wait for "2" seconds in web
+      Then accept web alert
+      Then wait for "2" seconds in web
+      Then Click on the order with captured order ID
+      Then wait for "2" seconds in web
+      Then Click on web Button with "Prepared"
 
   @driver 
   Scenario: Driver Application - Login and update order status
