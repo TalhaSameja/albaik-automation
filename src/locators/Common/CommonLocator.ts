@@ -134,7 +134,10 @@ export const CommonLocators = {
   loginBtn: "//input[@name='commit']",
   cardEndingWith: (lastFourDigits: string) => `//android.view.ViewGroup[@content-desc="ENDING, ${lastFourDigits}"]/com.horcrux.svg.SvgView/com.horcrux.svg.g/com.horcrux.svg.p`,
   ChannelPicker: '//android.view.ViewGroup[@resource-id="ChannelPicker"]/android.view.ViewGroup/com.horcrux.svg.SvgView',
-  'android:id/content': '//android.widget.FrameLayout[@resource-id="android:id/content"]/android.widget.FrameLayout/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup[1]/android.view.ViewGroup/android.view.ViewGroup[1]/android.widget.FrameLayout/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup[2]/android.view.ViewGroup[4]/com.horcrux.svg.SvgView/com.horcrux.svg.g/ya1',
+  'android:id/content': [
+    '//android.widget.FrameLayout[@resource-id="android:id/content"]/android.widget.FrameLayout/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup[1]/android.view.ViewGroup/android.view.ViewGroup[1]/android.widget.FrameLayout/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup[2]/android.view.ViewGroup[4]/com.horcrux.svg.SvgView/com.horcrux.svg.g/ya1',
+    '//android.widget.FrameLayout[@resource-id="android:id/content"]/android.widget.FrameLayout/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup[1]/android.view.ViewGroup/android.view.ViewGroup[1]/android.widget.FrameLayout/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup[2]/android.view.ViewGroup[3]/com.horcrux.svg.SvgView/com.horcrux.svg.g/ya1'
+  ],
 
   // --- Driver App Locators ---
   "phoneNumber": '//android.widget.EditText[@content-desc="phoneNumber"]',
@@ -146,4 +149,7 @@ export const CommonLocators = {
   "Continue": '//android.view.ViewGroup[@content-desc="Continue"]',
   "com.android.permissioncontroller:id/permission_allow_foreground_only_button": '//android.widget.Button[@resource-id="com.android.permissioncontroller:id/permission_allow_foreground_only_button"]',
   "Join restaurant queue": '//android.widget.TextView[@text="Join restaurant queue"]',
+  "KTM OFFICE": '//android.view.ViewGroup[@content-desc="العمل, KTM OFFICE"]/android.view.View',
+  "Choose this location": '//android.widget.TextView[@text="Choose this location"]',
+  "receipt number": '//android.widget.EditText[@content-desc="receipt number"]',
 };

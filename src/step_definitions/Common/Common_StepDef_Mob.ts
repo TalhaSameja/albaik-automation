@@ -38,6 +38,10 @@ Then(/^Scroll down "(\d+)" lines?$/, async (lines: string) => {
   await commonFunctionPage.scrollDownLines(parseInt(lines));
 });
 
+Then(/^Swipe left "(\d+)" times?$/, async (times: string) => {
+  await commonFunctionPage.swipeLeft(parseInt(times));
+});
+
 Then('Write {string} in the input field', async (text: string) => {
   await commonFunctionPage.write_in_input_field(text);
 });
@@ -45,6 +49,11 @@ Then('Write {string} in the input field', async (text: string) => {
 Then('Enter {string} into {string} Input', async (text: string, inputName: string) => {
   await commonFunctionPage.enter_text_in_input_field(text, inputName);
 });
+
+Then('Enter captured order ID into {string} Input', async (inputName: string) => {
+  await commonFunctionPage.enter_captured_order_id_in_input_field(inputName);
+});
+
 Then(/^Hit "([^"]*)" key$/, async (keyName: string) => {
     await commonFunctionPage.hit_key(keyName);
 });
