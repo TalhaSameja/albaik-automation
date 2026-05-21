@@ -1,7 +1,10 @@
 export class BasePage {
 
   protected get browserInstance() {
-    return browser.isMultiremote ? (global as any).mobile : browser;
+    if (!browser.isMultiremote) return browser;
+    const ctx = (global as any)._mobileContext;
+    if (ctx) return (global as any)[ctx] || browser;
+    return (global as any).mobile || browser;
   }
 
   async tap(selector: string): Promise<void> {

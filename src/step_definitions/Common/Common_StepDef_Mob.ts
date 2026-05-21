@@ -3,12 +3,39 @@ import {CommonFunctionPage} from '../../pages/cross-platform/Common_Pages_Mob';
 
 const commonFunctionPage = new CommonFunctionPage(); 
 
- Given(/^The Albaik application is launched(?: on emulator)?$/, async () => {
+ Given('The Albaik application is launched', async () => {
   await commonFunctionPage.waitForHomeScreen();
-  // Appium automatically launches the app during session startup.
-  // We pause briefly to let the initial UI elements (like the Skip screen) render.
   await commonFunctionPage.wait_for_seconds(5);
 });
+Given('The Albaik application is launched on emulator', async () => {
+  await commonFunctionPage.waitForHomeScreen();
+  await commonFunctionPage.wait_for_seconds(5);
+});
+Given('The Albaik application is launched on physical device', async () => {
+  await commonFunctionPage.waitForHomeScreen();
+  await commonFunctionPage.wait_for_seconds(5);
+});
+Given('The Albaik Driver application is launched', async () => {
+  await commonFunctionPage.launchDriverApplication();
+  await commonFunctionPage.wait_for_seconds(5);
+});
+
+Then('Close the Albaik application', async () => {
+  await commonFunctionPage.closeCustomerApplication();
+});
+Then('Close the Albaik application on physical device', async () => {
+  await commonFunctionPage.closeCustomerApplication();
+});
+Given('The Albaik Driver application is launched on emulator', async () => {
+  await commonFunctionPage.launchDriverApplication();
+  await commonFunctionPage.wait_for_seconds(5);
+});
+Given('The Albaik Driver application is launched on physical device', async () => {
+  await commonFunctionPage.launchDriverApplication();
+  await commonFunctionPage.wait_for_seconds(5);
+});
+
+
 
 Then('Verify that the {string} text is displayed', async (text: string) => {
   await commonFunctionPage.verify_txt(text);
@@ -30,6 +57,10 @@ Then(/^Scroll down "(\d+)" lines?$/, async (lines: string) => {
   await commonFunctionPage.scrollDownLines(parseInt(lines));
 });
 
+Then(/^Swipe left "(\d+)" times?$/, async (times: string) => {
+  await commonFunctionPage.swipeLeft(parseInt(times));
+});
+
 Then('Write {string} in the input field', async (text: string) => {
   await commonFunctionPage.write_in_input_field(text);
 });
@@ -37,6 +68,11 @@ Then('Write {string} in the input field', async (text: string) => {
 Then('Enter {string} into {string} Input', async (text: string, inputName: string) => {
   await commonFunctionPage.enter_text_in_input_field(text, inputName);
 });
+
+Then('Enter captured order ID into {string} Input', async (inputName: string) => {
+  await commonFunctionPage.enter_captured_order_id_in_input_field(inputName);
+});
+
 Then(/^Hit "([^"]*)" key$/, async (keyName: string) => {
     await commonFunctionPage.hit_key(keyName);
 });
@@ -65,6 +101,5 @@ Then(
 
 
 When('I redirect to branch {string} to bypass QR scan', async (branchId: string) => {
-    // Uses the Intent methodology to redirect the front-end UI
     await commonFunctionPage.redirectToBranchViaIntent(branchId);
 });

@@ -104,6 +104,62 @@ export function getCapabilities(testPlatform = process.env.TEST_PLATFORM || 'mob
 
   const mobileEnv = mobileEnvironments[env];
 
+  if (platform === 'customer') {
+
+    return {
+
+      platformName: 'Android',
+
+      'appium:udid': process.env.CUSTOMER_UDID || 'emulator-5554',
+
+      'appium:deviceName': process.env.CUSTOMER_UDID || 'emulator-5554',
+
+      'appium:automationName': 'UiAutomator2',
+
+      'appium:appPackage': mobileEnv.appPackage || process.env.APP_PACKAGE || '',
+
+      'appium:appActivity': mobileEnv.appActivity || process.env.APP_ACTIVITY || '',
+
+      'appium:noReset': false,
+
+      'appium:fullReset': false,
+
+      'appium:newCommandTimeout': 240,
+
+      'appium:autoGrantPermissions': true,
+
+    };
+
+  }
+
+  if (platform === 'driver') {
+
+    return {
+
+      platformName: 'Android',
+
+      'appium:udid': process.env.DRIVER_UDID || process.env.UDID || '',
+
+      'appium:deviceName': process.env.DRIVER_UDID || '',
+
+      'appium:automationName': 'UiAutomator2',
+
+      'appium:appPackage': process.env.DRIVER_APP_PACKAGE || 'com.albaikdriver',
+
+      'appium:appActivity': process.env.DRIVER_APP_ACTIVITY || '',
+
+      'appium:noReset': false,
+
+      'appium:fullReset': false,
+
+      'appium:newCommandTimeout': 240,
+
+      'appium:autoGrantPermissions': true,
+
+    };
+
+  }
+
 
 
   return {
@@ -135,4 +191,3 @@ export function getCapabilities(testPlatform = process.env.TEST_PLATFORM || 'mob
   };
 
 }
-

@@ -2,21 +2,18 @@ import { testData } from '../../data/Common/testData';
 import { CommonLocators } from '../../locators/Common/CommonLocator';
 
 export class CommonWebPage {
-    // Dynamically target the 'web' capability during cross-platform multi-remote tests
     private get webDriver() {
         return (browser as any).isMultiremote ? (browser as any).web : browser;
     }
 
-    /**
-     * Navigates to the base URL configured in testData
-     */
+ 
     async navigateToAdminPanel() {
+        try {
+            await this.webDriver.maximizeWindow();
+        } catch (e) {}
         await this.webDriver.url(testData.web.baseUrl);
     }
 
-    /**
-     * Performs login to the Admin Panel using credentials from testData
-     */
     async loginToAdmin() {
         await this.webDriver.$(CommonLocators.emailInput).waitForDisplayed({ timeout: 10000 });
         await this.webDriver.$(CommonLocators.emailInput).setValue(testData.web.email);
@@ -26,16 +23,37 @@ export class CommonWebPage {
         await this.webDriver.$(CommonLocators.loginBtn).click();
     }
 
-    /**
-     * Verifies the restaurant panel heading and waits 5 seconds for full loading
-     */
+    
     async waitForRestaurantPanel() {
         await this.webDriver.pause(5000);
     }
+    
+    
+    async navigateToCurbsidePanel() {
+        try {
+            await this.webDriver.maximizeWindow();
+        } catch (e) {}
+        const url = (testData as any).curbside?.baseUrl || 'https://staging.ordering.albaikcloud.com/curbside_user/branches/539/session/new';
+        await this.webDriver.url(url);
+    }
 
-    /**
-     * Pauses the web driver for a specified number of seconds
-     */
+   
+    async loginToCurbside() {
+        const phone = (testData as any).curbside?.phone || '536440699';
+        const pass = (testData as any).curbside?.password || 'Kualitatem123';
+        
+        const loginField = await this.webDriver.$(CommonLocators.curbsidePhoneInput);
+        await loginField.waitForDisplayed({ timeout: 10000 });
+        await loginField.setValue(phone);
+        await this.webDriver.$(CommonLocators.webPasswordInput).setValue(pass);
+        await this.webDriver.$(CommonLocators.loginBtn).click();
+    }
+
+    async waitForCurbsidePanel() {
+        await this.webDriver.pause(5000);
+    }
+
+   
     async wait_for_seconds_web(seconds: number) {
         await this.webDriver.pause(seconds * 1000);
     }
@@ -52,7 +70,7 @@ export class CommonWebPage {
         const element = await this.webDriver.$(locator);
         await element.waitForDisplayed({ timeout: 15000 });
         
-        const capturedOrderId = global.orderId;
+        const capturedOrderId = (global as any).orderId;
         if (!capturedOrderId) {
             throw new Error("Order ID was not captured previously!");
         }
@@ -67,12 +85,11 @@ export class CommonWebPage {
     }
 
     async click_captured_order_row() {
-        const capturedOrderId = global.orderId;
+        const capturedOrderId = (global as any).orderId;
         if (!capturedOrderId) {
             throw new Error("Order ID was not captured previously!");
         }
         
-        // Using the existing dynamicOrderRow locator to find the order in the table
         const locator = CommonLocators.dynamicOrderRow(capturedOrderId);
         const element = await this.webDriver.$(locator);
         await element.waitForDisplayed({ timeout: 15000 });
@@ -81,7 +98,7 @@ export class CommonWebPage {
     }
 
     async verify_order_details_page() {
-        const capturedOrderId = global.orderId;
+        const capturedOrderId = (global as any).orderId;
         if (!capturedOrderId) {
             throw new Error("Order ID was not captured previously!");
         }
@@ -90,5 +107,14 @@ export class CommonWebPage {
         const element = await this.webDriver.$(locator);
         await element.waitForDisplayed({ timeout: 15000 });
         console.log(`[Web] Verified order details page is displayed for Order ID: ${capturedOrderId}`);
+    }
+
+    async accept_web_alert() {
+        try {
+            await this.webDriver.acceptAlert();
+            console.log(`[Web] Accepted web alert`);
+        } catch (e) {
+            console.log(`[Web] No alert to accept or failed to accept alert: ${e}`);
+        }
     }
 }

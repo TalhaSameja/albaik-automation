@@ -1,19 +1,89 @@
 import { CommonLocators } from '../../locators/Common/CommonLocator';
 import { BasePage } from '../../common/mobile/BasePage';
-import { qrCodeUrls } from '../../data/Common/testData';
 import { testData } from '../../data/Common/testData';
-import * as QRCode from 'qrcode';
-import * as fs from 'fs';
-import * as path from 'path';
-import { Gestures } from '../../utils/gestures';
 
 export class CommonFunctionPage extends BasePage {
 
   private static readonly DEFAULT_WAIT = 60000;
   private bottomSheetAnchor = CommonLocators.bottomSheetAnchor;
 
+  // /**
+  //  * Brings the Android Emulator window to the front of the screen (macOS specific)
+  //  */
+  // private bringEmulatorToFront() {
+  //   if (process.platform === 'darwin') {
+  //       try {
+  //           // macOS usually identifies the Android emulator bundle natively as "Emulator"
+  //           execSync(`osascript -e 'tell application "Emulator" to activate'`);
+  //       } catch (e) {
+  //           try {
+  //               // Fallback: bring any process utilizing "qemu" (the emulator engine) to the front
+  //               execSync(`osascript -e 'tell application "System Events" to set frontmost of every process whose name contains "qemu" to true'`);
+  //           } catch (err) {}
+  //       }
+  //   }
+  // }
+
   async waitForHomeScreen(): Promise<void> {
+    // In dual-mobile mode, set context to the customer app session
+    if (browser.isMultiremote && (global as any).customerApp) {
+      (global as any)._mobileContext = 'customerApp';
+    }
     await this.waitForElement(this.bottomSheetAnchor, CommonFunctionPage.DEFAULT_WAIT);
+  }
+
+  async launchDriverApplication(): Promise<void> {
+    const driverPkg = process.env.DRIVER_APP_PACKAGE || 'com.albaikdriver';
+    const driverActivity = process.env.DRIVER_APP_ACTIVITY || 'com.albaikdriver.MainActivity';
+
+    let targetDriver: any;
+    
+    if (browser.isMultiremote && (global as any).driverApp) {
+      (global as any)._mobileContext = 'driverApp';
+      targetDriver = (global as any).driverApp;
+    } else {
+      targetDriver = (this.browserInstance as any).isMultiremote
+        ? (this.browserInstance as any).mobile
+        : this.browserInstance;
+    }
+
+    const isInstalled = await targetDriver.isAppInstalled(driverPkg);
+    if (!isInstalled) {
+      console.log(`\n[ERROR] Driver application package '${driverPkg}' is NOT installed on the device! Please install it.\n`);
+      throw new Error(`Package ${driverPkg} not installed`);
+    }
+
+    try {
+      await targetDriver.activateApp(driverPkg);
+    } catch (error) {
+      console.log(`[DEBUG] activateApp failed. Attempting fallback via monkey...`);
+      try {
+        await targetDriver.execute('mobile: shell', {
+          command: 'monkey',
+          args: ['-p', driverPkg, '-c', 'android.intent.category.LAUNCHER', '1']
+        });
+      } catch (fallbackError) {
+        console.log(`[DEBUG] monkey failed. Attempting am start fallback...`);
+        await targetDriver.execute('mobile: shell', {
+          command: 'am start',
+          args: ['-n', `${driverPkg}/${driverActivity}`]
+        });
+      }
+    }
+  }
+
+  async closeCustomerApplication(): Promise<void> {
+    const customerPkg = process.env.APP_PACKAGE || 'com.albaik.customer.staging';
+
+    if (browser.isMultiremote && (global as any).customerApp) {
+      await (global as any).customerApp.terminateApp(customerPkg);
+      return;
+    }
+
+    const driver = (this.browserInstance as any).isMultiremote
+      ? (this.browserInstance as any).mobile
+      : this.browserInstance;
+    await driver.terminateApp(customerPkg);
   }
 
   private buildTextSelectors(text: string): string[] {
@@ -39,7 +109,6 @@ export class CommonFunctionPage extends BasePage {
             return element;
           }
         } catch {
-          // try next selector
         }
       }
       await this.browserInstance.pause(500);
@@ -59,7 +128,6 @@ export class CommonFunctionPage extends BasePage {
   }
 
   async click_btn(btn_name: string) {
-    // 1. Check if btn_name is a direct key mapped in CommonLocators
     const predefinedLocator = (CommonLocators as any)[btn_name];
     if (predefinedLocator) {
         if (typeof predefinedLocator === 'string') {
@@ -76,7 +144,6 @@ export class CommonFunctionPage extends BasePage {
         }
     }
 
-    // 1.5 Handle system popup buttons explicitly by resource-id (e.g., location permission "No thanks" button)
     if (btn_name.startsWith('android:id/')) {
         const locator = CommonLocators.systemButton(btn_name);
         const element = await this.browserInstance.$(locator);
@@ -85,7 +152,6 @@ export class CommonFunctionPage extends BasePage {
         return;
     }
 
-    // 2. Fallback to generic text search if not mapped in locators
     const element = await this.findFirstDisplayed(
       this.buildTextSelectors(btn_name),
       CommonFunctionPage.DEFAULT_WAIT
@@ -99,7 +165,6 @@ export class CommonFunctionPage extends BasePage {
   async click_profile_icon() {
     const xpath = '//android.widget.FrameLayout[@resource-id="android:id/content"]/android.widget.FrameLayout/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup[1]/android.view.ViewGroup/android.view.ViewGroup[1]/android.widget.FrameLayout/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup[2]/android.view.ViewGroup[3]/com.horcrux.svg.SvgView/com.horcrux.svg.g/ya1';
     
-    // Target only the mobile emulator instance during cross-platform executions to prevent Chrome from timing out
     const driver = (this.browserInstance as any).isMultiremote 
       ? (this.browserInstance as any).mobile 
       : this.browserInstance;
@@ -117,16 +182,13 @@ export class CommonFunctionPage extends BasePage {
  async scrollDownLines(lines: number) {
   const { width, height } = await this.browserInstance.getWindowRect();
 
-  // Center horizontally
   const startX = Math.floor(width / 2);
 
-  // Start near bottom and move upward
   const startY = Math.floor(height * 0.80);
   const endY = Math.floor(height * 0.30);
 
   for (let i = 0; i < lines; i++) {
     try {
-      // Recommended reliable W3C touch action
       await this.browserInstance.performActions([
         {
           type: 'pointer',
@@ -163,7 +225,6 @@ export class CommonFunctionPage extends BasePage {
 
       await this.browserInstance.releaseActions();
 
-      // wait for animation/UI stabilization
       await this.browserInstance.pause(1000);
 
     } catch (error) {
@@ -171,12 +232,44 @@ export class CommonFunctionPage extends BasePage {
     }
   }
 }
+
+  async swipeLeft(times: number) {
+    const { width, height } = await this.browserInstance.getWindowRect();
+
+    const startY = Math.floor(height * 0.75);
+
+    const startX = Math.floor(width * 0.80);
+    const endX = Math.floor(width * 0.20);
+
+    for (let i = 0; i < times; i++) {
+      try {
+        await this.browserInstance.performActions([
+          {
+            type: 'pointer',
+            id: 'finger1',
+            parameters: { pointerType: 'touch' },
+            actions: [
+              { type: 'pointerMove', duration: 0, x: startX, y: startY },
+              { type: 'pointerDown', button: 0 },
+              { type: 'pause', duration: 300 },
+              { type: 'pointerMove', duration: 800, x: endX, y: startY },
+              { type: 'pointerUp', button: 0 }
+            ]
+          }
+        ]);
+        await this.browserInstance.releaseActions();
+        await this.browserInstance.pause(1000);
+      } catch (error) {
+        console.log('Swipe left failed:', error);
+      }
+    }
+  }
+
   async write_in_input_field(text: string) {
     await this.browserInstance.keys(text);
   }
 
   async enter_text_in_input_field(textToEnter: string, inputName: string) {
-    // 1. Check if inputName is a direct key mapped in CommonLocators
     const predefinedLocator = (CommonLocators as any)[inputName];
     if (predefinedLocator) {
         if (typeof predefinedLocator === 'string') {
@@ -193,7 +286,6 @@ export class CommonFunctionPage extends BasePage {
         }
     }
 
-    // 2. Fallback to generic text search if not mapped in locators
     const dynamicLocator = CommonLocators.dynamicTextInput(inputName);
     const element = await this.browserInstance.$(dynamicLocator);
     try {
@@ -202,6 +294,14 @@ export class CommonFunctionPage extends BasePage {
         throw new Error(`Input field "${inputName}" not found on screen within ${CommonFunctionPage.DEFAULT_WAIT}ms`);
     }
     await element.setValue(textToEnter);
+  }
+
+  async enter_captured_order_id_in_input_field(inputName: string) {
+    const capturedOrderId = (global as any).orderId;
+    if (!capturedOrderId) {
+        throw new Error("Order ID was not captured previously!");
+    }
+    await this.enter_text_in_input_field(capturedOrderId, inputName);
   }
 
   async hit_key(keyName: string) {
@@ -227,37 +327,7 @@ export class CommonFunctionPage extends BasePage {
   }
 
   
-    // async bypassScanWithLink(deepLink: string): Promise<void> {
-    //     const pkg = 'com.albaik.customer.staging';
-    //     console.log(`Executing deep link bypass: ${deepLink}`);
-
-    //     // 1. Navigate back to ensure we exit the camera view if it's open
-    //     await this.browserInstance.back();
-    //     await this.browserInstance.pause(1000);
-
-    //     // 2. Use ADB shell to trigger the deep link intent
-    //     await this.browserInstance.execute('mobile: shell', {
-    //         command: 'am start',
-    //         args: ['-W', '-a', 'android.intent.action.VIEW', '-d', deepLink, pkg]
-    //     });
-
-    //     // 3. Handle the "Start" or "Order Here" popup that follows a successful link trigger
-    //     console.log("Waiting for post-deep link confirmation...");
-    //     const startButton = await this.findFirstDisplayed(this.buildTextSelectors("Start"), 10000);
-
-    //     if (startButton) {
-    //         console.log("Confirmation popup detected. Proceeding to branch menu.");
-    //         await startButton.click();
-    //     }
-
-    //     await this.browserInstance.pause(3000);
-    // }
-
-    // /**
-    //  * Redirects the application UI to a specific branch using the Intent methodology.
-    //  * This bypasses the camera scan and attempts to force the app to navigate to the store page.
-    //  * @param branchId The ID of the branch (e.g., "539")
-    //  */
+    
     async redirectToBranchViaIntent(branchId: string): Promise<void> {
         const deepLink = `albaik://store/${branchId}`; // Construct the deep link
         const pkg = process.env.APP_PACKAGE || 'com.albaik.customer.staging'; // Get package from .env or fallback
@@ -265,7 +335,6 @@ export class CommonFunctionPage extends BasePage {
         
         console.log(`Initiating front-end redirection to branch ${branchId} via Deep Link: ${deepLink}`);
 
-        // 1. Dismiss the camera/scanner and any potential overlays
         try {
             console.log("[DEBUG] Dismissing camera/overlay before redirection...");
             await this.browserInstance.back();
@@ -336,10 +405,10 @@ export class CommonFunctionPage extends BasePage {
   const orderId =
     fullText.replace('#', '').trim();
 
-  global.orderId = orderId;
+  (global as any).orderId = orderId;
 
   console.log(
-    `Captured Order ID: ${global.orderId}`
+    `Captured Order ID: ${(global as any).orderId}`
   );
 }
       
