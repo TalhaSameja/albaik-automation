@@ -4,6 +4,7 @@ allure-results/
 allure-report/
 appium.log
 *.log
+.env
 apps/*.apk
 apps/*.aab
 inspector-output/
