@@ -101,6 +101,5 @@ Then(
 
 
 When('I redirect to branch {string} to bypass QR scan', async (branchId: string) => {
-    // Uses the Intent methodology to redirect the front-end UI
     await commonFunctionPage.redirectToBranchViaIntent(branchId);
 });

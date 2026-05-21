@@ -18,7 +18,6 @@ dotenvConfig();
 
 
 
-// Ensure ANDROID_SDK_ROOT is set — Appium requires it even when ANDROID_HOME is set
 process.env.ANDROID_SDK_ROOT = process.env.ANDROID_SDK_ROOT || process.env.ANDROID_HOME;
 
 
@@ -90,6 +89,13 @@ export const config: WebdriverIO.Config = {
 
 
   specs: testSpecs,
+
+  suites: {
+    carPickup: ['./src/features/cross-platform/CarPickup.feature'],
+    pickup: ['./src/features/cross-platform/Pickup.feature'],
+    delivery: ['./src/features/cross-platform/Delivery.feature'],
+    scanToOrder: ['./src/features/cross-platform/ScanToOrder.feature'],
+  },
 
 
 
