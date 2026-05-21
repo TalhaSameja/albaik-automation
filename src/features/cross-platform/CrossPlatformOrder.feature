@@ -214,6 +214,7 @@ Feature: Cross-Platform Order Placement and Verification
       Then Swipe left "2" times
       Then Click on "KTM OFFICE" button
       Then Click on "Choose this location" button
+      Then Click on "Choose this location" button
       Then Scroll down "2" lines
       Then Click on "cola" button
       Then Click on "Add to order" button
@@ -250,7 +251,8 @@ Feature: Cross-Platform Order Placement and Verification
       Then Click on the order with captured order ID
       Then wait for "2" seconds in web
       Then Click on web Button with "Prepared"
-      Given The Albaik Driver application is launched on emulator
+      Then Close the Albaik application on physical device
+      Given The Albaik Driver application is launched on physical device
       Then wait for "5" Seconds
       Then Click on "1" button
       Then Click on "Scan receipt" button

@@ -55,7 +55,7 @@ const stepDefinitionFiles = (isDualMobile || isFullDelivery)
     ]
   : isWeb
   ? [
-      './src/step_definitions/Common/Common_StepDef_Web.ts',
+      './src/step_definitions/Common/Common_StepDef_web.ts',
       './src/step_definitions/web/**/*.ts',
       './src/step_definitions/cross-platform/**/*.ts',
     ]

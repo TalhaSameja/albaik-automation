@@ -1,6 +1,5 @@
 import { testData } from '../../data/Common/testData';
 import { CommonLocators } from '../../locators/Common/CommonLocator';
-import { execSync } from 'child_process';
 
 export class CommonWebPage {
     // Dynamically target the 'web' capability during cross-platform multi-remote tests
@@ -98,7 +97,7 @@ export class CommonWebPage {
         const element = await this.webDriver.$(locator);
         await element.waitForDisplayed({ timeout: 15000 });
         
-        const capturedOrderId = global.orderId;
+        const capturedOrderId = (global as any).orderId;
         if (!capturedOrderId) {
             throw new Error("Order ID was not captured previously!");
         }
@@ -113,7 +112,7 @@ export class CommonWebPage {
     }
 
     async click_captured_order_row() {
-        const capturedOrderId = global.orderId;
+        const capturedOrderId = (global as any).orderId;
         if (!capturedOrderId) {
             throw new Error("Order ID was not captured previously!");
         }
@@ -127,7 +126,7 @@ export class CommonWebPage {
     }
 
     async verify_order_details_page() {
-        const capturedOrderId = global.orderId;
+        const capturedOrderId = (global as any).orderId;
         if (!capturedOrderId) {
             throw new Error("Order ID was not captured previously!");
         }

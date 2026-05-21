@@ -19,6 +19,13 @@ Given('The Albaik Driver application is launched', async () => {
   await commonFunctionPage.launchDriverApplication();
   await commonFunctionPage.wait_for_seconds(5);
 });
+
+Then('Close the Albaik application', async () => {
+  await commonFunctionPage.closeCustomerApplication();
+});
+Then('Close the Albaik application on physical device', async () => {
+  await commonFunctionPage.closeCustomerApplication();
+});
 Given('The Albaik Driver application is launched on emulator', async () => {
   await commonFunctionPage.launchDriverApplication();
   await commonFunctionPage.wait_for_seconds(5);

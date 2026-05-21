@@ -1,12 +1,6 @@
 import { CommonLocators } from '../../locators/Common/CommonLocator';
 import { BasePage } from '../../common/mobile/BasePage';
-import { qrCodeUrls } from '../../data/Common/testData';
 import { testData } from '../../data/Common/testData';
-import * as QRCode from 'qrcode';
-import * as fs from 'fs';
-import { execSync } from 'child_process';
-import * as path from 'path';
-import { Gestures } from '../../utils/gestures';
 
 export class CommonFunctionPage extends BasePage {
 
@@ -40,19 +34,58 @@ export class CommonFunctionPage extends BasePage {
 
   async launchDriverApplication(): Promise<void> {
     const driverPkg = process.env.DRIVER_APP_PACKAGE || 'com.albaikdriver';
+    const driverActivity = process.env.DRIVER_APP_ACTIVITY || 'com.albaikdriver.MainActivity';
 
+    let targetDriver: any;
+    
     if (browser.isMultiremote && (global as any).driverApp) {
       // dual-mobile: switch context to the separate driver device session
       (global as any)._mobileContext = 'driverApp';
-      await (global as any).driverApp.activateApp(driverPkg);
+      targetDriver = (global as any).driverApp;
+    } else {
+      // cross-platform or single device: activate driver app on same device
+      targetDriver = (this.browserInstance as any).isMultiremote
+        ? (this.browserInstance as any).mobile
+        : this.browserInstance;
+    }
+
+    const isInstalled = await targetDriver.isAppInstalled(driverPkg);
+    if (!isInstalled) {
+      console.log(`\n[ERROR] Driver application package '${driverPkg}' is NOT installed on the device! Please install it.\n`);
+      throw new Error(`Package ${driverPkg} not installed`);
+    }
+
+    try {
+      await targetDriver.activateApp(driverPkg);
+    } catch (error) {
+      console.log(`[DEBUG] activateApp failed. Attempting fallback via monkey...`);
+      try {
+        await targetDriver.execute('mobile: shell', {
+          command: 'monkey',
+          args: ['-p', driverPkg, '-c', 'android.intent.category.LAUNCHER', '1']
+        });
+      } catch (fallbackError) {
+        console.log(`[DEBUG] monkey failed. Attempting am start fallback...`);
+        await targetDriver.execute('mobile: shell', {
+          command: 'am start',
+          args: ['-n', `${driverPkg}/${driverActivity}`]
+        });
+      }
+    }
+  }
+
+  async closeCustomerApplication(): Promise<void> {
+    const customerPkg = process.env.APP_PACKAGE || 'com.albaik.customer.staging';
+
+    if (browser.isMultiremote && (global as any).customerApp) {
+      await (global as any).customerApp.terminateApp(customerPkg);
       return;
     }
 
-    // cross-platform or single device: activate driver app on same device
     const driver = (this.browserInstance as any).isMultiremote
       ? (this.browserInstance as any).mobile
       : this.browserInstance;
-    await driver.activateApp(driverPkg);
+    await driver.terminateApp(customerPkg);
   }
 
   private buildTextSelectors(text: string): string[] {
@@ -279,7 +312,7 @@ export class CommonFunctionPage extends BasePage {
   }
 
   async enter_captured_order_id_in_input_field(inputName: string) {
-    const capturedOrderId = global.orderId;
+    const capturedOrderId = (global as any).orderId;
     if (!capturedOrderId) {
         throw new Error("Order ID was not captured previously!");
     }
@@ -418,10 +451,10 @@ export class CommonFunctionPage extends BasePage {
   const orderId =
     fullText.replace('#', '').trim();
 
-  global.orderId = orderId;
+  (global as any).orderId = orderId;
 
   console.log(
-    `Captured Order ID: ${global.orderId}`
+    `Captured Order ID: ${(global as any).orderId}`
   );
 }
       
