@@ -6,14 +6,14 @@
 
 export const qrCodeUrls: { [key: string]: string } = {
   // Change the key here to match your Feature File
-  'KTM_BRANCH': 'albaik://store/539', 
+  'KTM_BRANCH': 'albaik://store/539',
 };
 export const testData = {
   web: {
     baseUrl: 'https://staging.ordering.albaikcloud.com/sign_in',
     email: 'jane.doe@albaik.com',
     password: 'Kualitatem123',
-    
+
   },
   mobile: {
     phoneNumber: '532255875',
