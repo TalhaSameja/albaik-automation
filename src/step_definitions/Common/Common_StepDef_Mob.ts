@@ -61,6 +61,10 @@ Then(/^Swipe left "(\d+)" times?$/, async (times: string) => {
   await commonFunctionPage.swipeLeft(parseInt(times));
 });
 
+Then(/^Swipe left "(\d+)" times? on "([^"]*)" section$/, async (times: string, section: string) => {
+  await commonFunctionPage.swipeLeftOnElement(parseInt(times), section);
+});
+
 Then('Write {string} in the input field', async (text: string) => {
   await commonFunctionPage.write_in_input_field(text);
 });
