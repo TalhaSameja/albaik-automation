@@ -134,6 +134,8 @@ export const CommonLocators = {
   cardEndingWith: (lastFourDigits: string) => `//android.view.ViewGroup[@content-desc="ENDING, ${lastFourDigits}"]/com.horcrux.svg.SvgView/com.horcrux.svg.g/com.horcrux.svg.p`,
   ChannelPicker: '//android.view.ViewGroup[@resource-id="ChannelPicker"]/android.view.ViewGroup/com.horcrux.svg.SvgView',
   'android:id/content': [
+    '//android.widget.FrameLayout[@resource-id="android:id/content"]/android.widget.FrameLayout/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup[1]/android.view.ViewGroup/android.view.ViewGroup[1]/android.widget.FrameLayout/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup[2]/android.view.ViewGroup[3]/com.horcrux.svg.SvgView/com.horcrux.svg.g/Ca1',
+    '//android.widget.FrameLayout[@resource-id="android:id/content"]/android.widget.FrameLayout/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup[1]/android.view.ViewGroup/android.view.ViewGroup[1]/android.widget.FrameLayout/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup[2]/android.view.ViewGroup[4]/com.horcrux.svg.SvgView/com.horcrux.svg.g/Ca1',
     '//android.widget.FrameLayout[@resource-id="android:id/content"]/android.widget.FrameLayout/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup[1]/android.view.ViewGroup/android.view.ViewGroup[1]/android.widget.FrameLayout/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup[2]/android.view.ViewGroup[4]/com.horcrux.svg.SvgView/com.horcrux.svg.g/ya1',
     '//android.widget.FrameLayout[@resource-id="android:id/content"]/android.widget.FrameLayout/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup[1]/android.view.ViewGroup/android.view.ViewGroup[1]/android.widget.FrameLayout/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup[2]/android.view.ViewGroup[3]/com.horcrux.svg.SvgView/com.horcrux.svg.g/ya1'
   ],
@@ -151,4 +153,19 @@ export const CommonLocators = {
   "KTM OFFICE": '//android.view.ViewGroup[@content-desc="العمل, KTM OFFICE"]/android.view.View',
   "Choose this location": '//android.widget.TextView[@text="Choose this location"]',
   "receipt number": '//android.widget.EditText[@content-desc="receipt number"]',
+
+  "View All": [
+    '//android.view.ViewGroup[@content-desc="View All"]',
+    '//android.widget.TextView[@text="View All"]',
+    'android=new UiSelector().textMatches("(?i)view all")',
+    'android=new UiSelector().descriptionMatches("(?i)view all")',
+  ],
+  "MyListSection": '//android.widget.ScrollView/android.view.ViewGroup/android.view.ViewGroup[2]',
+  "myListItem": '(//android.widget.ImageView[contains(@resource-id, "item-list-image")])[1]',
+  "stcPaySubmit": '//android.view.ViewGroup[@content-desc="Pay "]/android.view.ViewGroup/com.horcrux.svg.SvgView/com.horcrux.svg.g/com.horcrux.svg.g/com.horcrux.svg.p',
+  "payWithNewCard": '//android.widget.TextView[contains(@text, "with this card")]',
+  "Order History": '//android.view.ViewGroup[@content-desc="Order History"]/android.view.View',
+  "orderHistoryItem": '(//android.view.ViewGroup[contains(@content-desc, "HOURS AGO")]/android.view.View)[1]',
+  "Account": '//android.view.ViewGroup[@content-desc="Account"]/android.view.View',
+  "accountEmailField": '(//android.widget.EditText[contains(@text, "@")])[1]',
 };
