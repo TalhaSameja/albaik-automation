@@ -280,7 +280,7 @@ export class CommonFunctionPage extends BasePage {
       }
     }
   }
-
+//for favorites
   async swipeLeftOnElement(times: number, elementKey: string) {
     const locator = (CommonLocators as any)[elementKey];
     if (!locator) {
