@@ -41,6 +41,8 @@ export function getCapabilities(testPlatform = process.env.TEST_PLATFORM || 'mob
             '--disable-logging',
 
             '--output=/dev/null',
+            
+            ...(process.env.CI ? ['--headless=new', '--no-sandbox'] : [])
 
           ],
 

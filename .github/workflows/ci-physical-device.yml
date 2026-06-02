@@ -1,0 +1,73 @@
+name: Cross-Platform CI on Physical Device (Self-Hosted)
+
+on:
+  push:
+    branches: [ "master", "main", "talha-automation", "hamza-automation" ]
+  pull_request:
+    branches: [ "master", "main" ]
+  workflow_dispatch:
+    inputs:
+      test_platform:
+        description: 'Test Platform to Run'
+        required: true
+        default: 'cross-platform'
+        type: choice
+        options:
+          - cross-platform
+          - mobile
+          - web
+          - dual-mobile
+
+jobs:
+  automation-tests:
+    runs-on: self-hosted
+
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+
+      - name: ⚙️ Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: 📦 Install dependencies
+        run: npm ci
+
+      - name: 📱 Verify Physical Android Device
+        run: adb devices | Select-String -Pattern "\sdevice$"
+        shell: powershell
+
+      - name: 🚀 Start Appium Server (Background)
+        run: |
+          Start-Process -NoNewWindow -FilePath "npx" -ArgumentList "appium", "--relaxed-security" -RedirectStandardOutput "appium.log" -RedirectStandardError "appium_error.log"
+          Start-Sleep -Seconds 10
+        shell: powershell
+
+      - name: 🧪 Execute Tests
+        env:
+          TEST_PLATFORM: ${{ github.event.inputs.test_platform || 'cross-platform' }}
+          CI: true
+        run: npm run test:${env:TEST_PLATFORM}
+        shell: powershell
+        continue-on-error: true
+
+      - name: 📊 Generate Allure Report
+        run: npm run allure:generate
+        shell: powershell
+        if: always()
+
+      - name: 📤 Upload Allure Report Artifact
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: allure-report
+          path: allure-report
+          retention-days: 14
+
+      - name: 🛑 Cleanup Appium
+        if: always()
+        run: |
+          Stop-Process -Name "node" -Force -ErrorAction SilentlyContinue
+        shell: powershell
