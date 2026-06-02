@@ -8,3 +8,4 @@ appium.log
 apps/*.apk
 apps/*.aab
 inspector-output/
+actions-runner/

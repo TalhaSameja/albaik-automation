@@ -66,6 +66,27 @@ jobs:
           path: allure-report
           retention-days: 14
 
+      - name: 🗜️ Zip Allure Report for Email
+        if: always()
+        run: Compress-Archive -Path allure-report\* -DestinationPath allure-report.zip -Force
+        shell: powershell
+
+      - name: 📧 Send Email with Report
+        uses: dawidd6/action-send-mail@v3
+        if: always()
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          secure: true
+          username: ${{ secrets.EMAIL_USERNAME }}
+          password: ${{ secrets.EMAIL_PASSWORD }}
+          subject: Automation Test Results - ${{ github.repository }}
+          to: ${{ secrets.RECIPIENT_EMAIL }}
+          cc: ${{ secrets.CC_EMAIL }}
+          from: GitHub Actions Bot
+          body: The automated tests have finished running! Please find the Allure test report attached as a ZIP file.
+          attachments: allure-report.zip
+
       - name: 🛑 Cleanup Appium
         if: always()
         run: |
