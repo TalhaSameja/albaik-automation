@@ -1,4 +1,5 @@
 {
+    "typescript.tsdk": "node_modules/typescript/lib",
     "cucumberautocomplete.steps": [
         "src/step_definitions/**/*.ts",
         "src/step_definitions/**/*.js"

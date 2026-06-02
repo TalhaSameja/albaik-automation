@@ -190,6 +190,17 @@ export const config: WebdriverIO.Config = {
     }
   },
 
+  onComplete: function () {
+    try {
+      execSync('npx allure generate allure-results --clean -o allure-report', { stdio: 'inherit' });
+      console.log('\n✅ Allure HTML report ready → allure-report/index.html');
+      console.log('   View:  npm run allure:open');
+      console.log('   Share: npm run report:zip\n');
+    } catch (e) {
+      console.error('Could not generate Allure HTML report:', e);
+    }
+  },
+
   bail: 0,
 
   waitforTimeout: 30000,

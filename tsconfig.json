@@ -9,7 +9,6 @@
     "skipLibCheck": true,
     "outDir": "./dist",
     "rootDir": "./",
-    "baseUrl": "./",
     "types": ["node", "@wdio/globals/types", "@wdio/cucumber-framework"],
     "resolveJsonModule": true
   },

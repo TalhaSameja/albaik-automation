@@ -37,7 +37,8 @@
     "inspect": "ts-node -P tsconfig.json scripts/inspect.ts",
     "allure:generate": "allure generate allure-results --clean -o allure-report",
     "allure:open": "allure open allure-report",
-    "allure:report": "npm run allure:generate && npm run allure:open"
+    "allure:report": "npm run allure:generate && npm run allure:open",
+    "report:zip": "npm run allure:generate && powershell -Command \"Compress-Archive -Path allure-report -DestinationPath allure-report.zip -Force\" && echo Zipped to allure-report.zip"
   },
   "devDependencies": {
     "@cucumber/cucumber": "10.9.0",
