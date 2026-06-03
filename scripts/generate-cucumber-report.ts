@@ -1,30 +1,30 @@
-const report = require('multiple-cucumber-html-reporter');
+const reporter = require('cucumber-html-reporter');
 
 const isWeb = process.env.TEST_PLATFORM === 'web';
 const browserName = process.env.BROWSER || (isWeb ? 'chrome' : 'appium');
 const envName = process.env.ENV || 'QA';
+const platformName = process.env.TEST_PLATFORM || 'mobile';
 
-report.generate({
+const options = {
+    theme: 'bootstrap',
     jsonDir: './cucumber-json-reports/',
-    reportPath: './cucumber-html-reports/',
+    output: './cucumber-html-reports/index.html',
+    reportSuiteAsScenarios: true,
+    scenarioTimestamp: true,
+    launchReport: false,
     metadata: {
-        browser: {
-            name: browserName,
-            version: 'Latest'
-        },
-        device: 'Test Device',
-        platform: {
-            name: isWeb ? 'windows' : 'android',
-            version: 'Latest'
-        }
+        "Project": "Albaik Automation",
+        "Test Environment": envName.toUpperCase(),
+        "Platform": platformName,
+        "Browser": browserName,
+        "Execution Time": new Date().toLocaleString()
     },
-    customData: {
-        title: 'Run info',
-        data: [
-            { label: 'Project', value: 'Albaik Automation' },
-            { label: 'Environment', value: envName.toUpperCase() },
-            { label: 'Platform', value: process.env.TEST_PLATFORM || 'mobile' },
-            { label: 'Execution Time', value: new Date().toLocaleString() }
-        ]
-    }
-});
+    failedSummaryReport: true,
+};
+
+try {
+    reporter.generate(options);
+    console.log("Classic Cucumber HTML Report generated successfully.");
+} catch (error) {
+    console.error("Error generating Cucumber report:", error);
+}
