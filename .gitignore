@@ -9,3 +9,8 @@ apps/*.apk
 apps/*.aab
 inspector-output/
 actions-runner/
+
+# Test Reports
+cucumber-json-reports/
+cucumber-html-reports/
+*.zip
