@@ -68,14 +68,6 @@ jobs:
         shell: powershell
         if: always()
 
-      - name: Upload Allure Report Artifact
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: allure-report
-          path: allure-report
-          retention-days: 14
-
       - name: Upload Cucumber HTML Report Artifact
         uses: actions/upload-artifact@v4
         if: always()
@@ -100,10 +92,10 @@ jobs:
           body: |
             The automated tests have finished running! 
             
-            You can download the full test reports (both Allure and Cucumber HTML) securely by clicking the link below:
+            You can download the full Cucumber BDD HTML test report securely by clicking the link below:
             https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
             
-            (Scroll down to the "Artifacts" section at the bottom of that page to download the ZIP files).
+            (Scroll down to the "Artifacts" section at the bottom of that page and click "cucumber-html-report" to download the ZIP file).
 
       - name: Cleanup Appium Server Process
         if: always()
