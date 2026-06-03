@@ -40,7 +40,7 @@
     "allure:report": "npm run allure:generate && npm run allure:open",
     "report:cucumber:generate": "ts-node scripts/generate-cucumber-report.ts",
     "report:cucumber:open": "start cucumber-html-reports/index.html",
-    "report:zip": "npm run report:cucumber:generate && powershell -Command \"Compress-Archive -Path cucumber-html-reports -DestinationPath cucumber-report.zip -Force\" && echo Zipped to cucumber-report.zip"
+    "report:zip": "powershell -Command \"Compress-Archive -Path cucumber-html-reports -DestinationPath cucumber-report.zip -Force\" && echo Zipped to cucumber-report.zip"
   },
   "devDependencies": {
     "@cucumber/cucumber": "10.9.0",
