@@ -40,17 +40,14 @@ jobs:
         run: |
           $devices = adb devices | Select-String -Pattern "\sdevice$"
           if (-not $devices) {
-            Write-Warning "No physical Android device connected. Tests will be skipped, but we will still generate a report."
-            echo "DEVICE_FOUND=false" | Out-File -FilePath $env:GITHUB_ENV -Append
-          } else {
-            echo "DEVICE_FOUND=true" | Out-File -FilePath $env:GITHUB_ENV -Append
-            # Wake up the screen if it's asleep
-            adb shell input keyevent 26
+            Write-Error "CRITICAL: No physical Android device connected or authorized!"
+            exit 1
           }
+          # Wake up the screen if it's asleep
+          adb shell input keyevent 26
         shell: powershell
 
       - name: Start Appium Server
-        if: env.DEVICE_FOUND == 'true'
         run: |
           $appiumProcess = Start-Process -NoNewWindow -FilePath "npx" -ArgumentList "appium", "--relaxed-security" -RedirectStandardOutput "appium.log" -RedirectStandardError "appium_error.log" -PassThru
           echo "APPIUM_PID=$($appiumProcess.Id)" | Out-File -FilePath $env:GITHUB_ENV -Append
@@ -60,7 +57,6 @@ jobs:
         shell: powershell
 
       - name: Execute Automation Test Suite
-        if: env.DEVICE_FOUND == 'true'
         env:
           TEST_PLATFORM: ${{ github.event.inputs.test_platform || 'cross-platform' }}
           CI: true
@@ -80,22 +76,6 @@ jobs:
           path: allure-report
           retention-days: 14
 
-      - name: Deploy Allure Report to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        if: always()
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./allure-report
-          publish_branch: gh-pages
-
-      - name: Extract Repo Name for URL
-        if: always()
-        run: |
-          $repo = "${{ github.repository }}"
-          $repoName = $repo.Split('/')[1]
-          echo "REPO_NAME=$repoName" | Out-File -FilePath $env:GITHUB_ENV -Append
-        shell: powershell
-
       - name: Send Email Notification with Results
         uses: dawidd6/action-send-mail@v3
         if: always()
@@ -112,10 +92,10 @@ jobs:
           body: |
             The automated tests have finished running! 
             
-            You can view the full, interactive Allure HTML test report directly in your browser by clicking the link below:
-            https://${{ github.repository_owner }}.github.io/${{ env.REPO_NAME }}/
+            You can download the full Allure HTML test report securely by clicking the link below:
+            https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
             
-            (Note: It might take a minute or two for GitHub Pages to update after the pipeline completes. If the page is not found, please ensure GitHub Pages is enabled in your repository settings under Settings > Pages, pointing to the 'gh-pages' branch.)
+            (Scroll down to the "Artifacts" section at the bottom of that page and click "allure-report" to download the ZIP file).
 
       - name: Cleanup Appium Server Process
         if: always()
