@@ -1,4 +1,4 @@
-name: Mobile Automation CI/CD Pipeline
+name: Albaik Automation CI/CD Pipeline
 
 on:
   push:
