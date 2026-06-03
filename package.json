@@ -38,7 +38,9 @@
     "allure:generate": "allure generate allure-results --clean -o allure-report",
     "allure:open": "allure open allure-report",
     "allure:report": "npm run allure:generate && npm run allure:open",
-    "report:zip": "npm run allure:generate && powershell -Command \"Compress-Archive -Path allure-report -DestinationPath allure-report.zip -Force\" && echo Zipped to allure-report.zip"
+    "report:cucumber:generate": "ts-node scripts/generate-cucumber-report.ts",
+    "report:cucumber:open": "start cucumber-html-reports/index.html",
+    "report:zip": "npm run allure:generate && npm run report:cucumber:generate && powershell -Command \"Compress-Archive -Path allure-report -DestinationPath allure-report.zip -Force\" && echo Zipped to allure-report.zip"
   },
   "devDependencies": {
     "@cucumber/cucumber": "10.9.0",
@@ -55,9 +57,11 @@
     "allure-commandline": "^2.0.0",
     "cross-env": "^7.0.3",
     "dotenv": "^16.0.0",
+    "multiple-cucumber-html-reporter": "^3.10.0",
     "qrcode": "^1.5.4",
     "ts-node": "^10.0.0",
     "typescript": "^6.0.3",
+    "wdio-cucumberjs-json-reporter": "^6.0.1",
     "webdriverio": "^9.0.0"
   }
 }

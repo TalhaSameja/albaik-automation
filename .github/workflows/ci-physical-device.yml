@@ -76,6 +76,14 @@ jobs:
           path: allure-report
           retention-days: 14
 
+      - name: Upload Cucumber HTML Report Artifact
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cucumber-html-report
+          path: cucumber-html-reports
+          retention-days: 14
+
       - name: Send Email Notification with Results
         uses: dawidd6/action-send-mail@v3
         if: always()
@@ -92,10 +100,10 @@ jobs:
           body: |
             The automated tests have finished running! 
             
-            You can download the full Allure HTML test report securely by clicking the link below:
+            You can download the full test reports (both Allure and Cucumber HTML) securely by clicking the link below:
             https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
             
-            (Scroll down to the "Artifacts" section at the bottom of that page and click "allure-report" to download the ZIP file).
+            (Scroll down to the "Artifacts" section at the bottom of that page to download the ZIP files).
 
       - name: Cleanup Appium Server Process
         if: always()

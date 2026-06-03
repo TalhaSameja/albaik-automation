@@ -180,6 +180,8 @@ export const config: WebdriverIO.Config = {
   onPrepare: function () {
     const allureResultsPath = path.join(process.cwd(), 'allure-results');
     const allureReportPath = path.join(process.cwd(), 'allure-report');
+    const cucumberJsonPath = path.join(process.cwd(), 'cucumber-json-reports');
+    const cucumberHtmlPath = path.join(process.cwd(), 'cucumber-html-reports');
 
     if (fs.existsSync(allureResultsPath)) {
       fs.rmSync(allureResultsPath, { recursive: true, force: true });
@@ -187,6 +189,12 @@ export const config: WebdriverIO.Config = {
     }
     if (fs.existsSync(allureReportPath)) {
       fs.rmSync(allureReportPath, { recursive: true, force: true });
+    }
+    if (fs.existsSync(cucumberJsonPath)) {
+      fs.rmSync(cucumberJsonPath, { recursive: true, force: true });
+    }
+    if (fs.existsSync(cucumberHtmlPath)) {
+      fs.rmSync(cucumberHtmlPath, { recursive: true, force: true });
     }
   },
 
@@ -198,6 +206,14 @@ export const config: WebdriverIO.Config = {
       console.log('   Share: npm run report:zip\n');
     } catch (e) {
       console.error('Could not generate Allure HTML report:', e);
+    }
+
+    try {
+      execSync('npx ts-node scripts/generate-cucumber-report.ts', { stdio: 'inherit' });
+      console.log('\n✅ Cucumber HTML report ready → cucumber-html-reports/index.html');
+      console.log('   View:  npm run report:cucumber:open\n');
+    } catch (e) {
+      console.error('Could not generate Cucumber HTML report:', e);
     }
   },
 
@@ -269,6 +285,11 @@ export const config: WebdriverIO.Config = {
       },
 
     ],
+
+    ['cucumberjs-json', {
+      jsonFolder: 'cucumber-json-reports',
+      language: 'en',
+    }],
 
   ],
 
