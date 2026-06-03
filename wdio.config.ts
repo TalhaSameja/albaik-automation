@@ -9,6 +9,7 @@ import fs from 'fs';
 import path from 'path';
 
 import AllureReporter from '@wdio/allure-reporter';
+import cucumberJson from 'wdio-cucumberjs-json-reporter';
 
 import { getCapabilities } from './config/capabilities';
 
@@ -200,21 +201,16 @@ export const config: WebdriverIO.Config = {
 
   onComplete: function () {
     try {
-      execSync('npx allure generate allure-results --clean -o allure-report', { stdio: 'inherit' });
-      console.log('\n✅ Allure HTML report ready → allure-report/index.html');
-      console.log('   View:  npm run allure:open');
-      console.log('   Share: npm run report:zip\n');
-    } catch (e) {
-      console.error('Could not generate Allure HTML report:', e);
-    }
-
-    try {
       execSync('npx ts-node scripts/generate-cucumber-report.ts', { stdio: 'inherit' });
       console.log('\n✅ Cucumber HTML report ready → cucumber-html-reports/index.html');
       console.log('   View:  npm run report:cucumber:open\n');
     } catch (e) {
       console.error('Could not generate Cucumber HTML report:', e);
     }
+    
+    // Note for Allure Backup
+    console.log('ℹ️  Allure report auto-generation is disabled (Cucumber is primary).');
+    console.log('   To generate Allure manually as a backup, run: npm run allure:report\n');
   },
 
   bail: 0,
@@ -294,6 +290,24 @@ export const config: WebdriverIO.Config = {
   ],
 
 
+
+  afterStep: async function (step, scenario, result, context) {
+    if (!result.passed) {
+      try {
+        const screenshot = await browser.takeScreenshot();
+        if (typeof screenshot === 'string') {
+          // Pass the base64 string directly to cucumber JSON
+          cucumberJson.attach(screenshot, 'image/png');
+        } else if (screenshot && typeof screenshot === 'object') {
+          for (const base64Data of Object.values(screenshot)) {
+            cucumberJson.attach(base64Data as string, 'image/png');
+          }
+        }
+      } catch (error) {
+        console.error('Failed to capture Cucumber screenshot:', error);
+      }
+    }
+  },
 
   afterScenario: async function (_world, result) {
 

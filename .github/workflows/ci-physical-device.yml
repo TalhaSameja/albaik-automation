@@ -90,12 +90,17 @@ jobs:
           cc: ${{ secrets.CC_EMAIL }}
           from: GitHub Actions Bot
           body: |
-            The automated tests have finished running! 
+            Dear Team,
             
-            You can download the full Cucumber BDD HTML test report securely by clicking the link below:
+            The automated test execution has finished running for the latest code changes.
+            
+            Please find the detailed execution report securely available at the link below:
             https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
             
-            (Scroll down to the "Artifacts" section at the bottom of that page and click "cucumber-html-report" to download the ZIP file).
+            (To download the report, scroll down to the "Artifacts" section at the bottom of the page and click the ZIP file).
+            
+            Best Regards,
+            QA Automation Team
 
       - name: Cleanup Appium Server Process
         if: always()
