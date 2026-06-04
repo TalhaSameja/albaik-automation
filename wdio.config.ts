@@ -59,7 +59,11 @@ const stepDefinitionFiles = (isDualMobile || isFullDelivery)
       './src/step_definitions/web/**/*.ts',
       './src/step_definitions/cross-platform/**/*.ts',
     ]
-  : ['./src/step_definitions/mobile/SettingsSteps.ts', './src/step_definitions/mobile/AlbaikHomeSteps.ts'];
+  : [
+      './src/step_definitions/Common/Common_StepDef_Mob.ts',
+      './src/step_definitions/mobile/**/*.ts',
+      './src/step_definitions/cross-platform/**/*.ts',
+    ];
 
 
 
