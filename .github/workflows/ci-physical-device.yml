@@ -48,8 +48,8 @@ jobs:
             Write-Error "CRITICAL: No physical Android device connected or authorized!"
             exit 1
           }
-          # Wake up the screen if it's asleep
-          adb shell input keyevent 26
+          # Wake up the screen if it's asleep (KEYCODE_WAKEUP = 224, won't lock if already awake)
+          adb shell input keyevent 224
         shell: powershell
 
       - name: Execute Automation Test Suite
