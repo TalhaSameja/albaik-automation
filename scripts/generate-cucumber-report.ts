@@ -27,6 +27,7 @@ const options = {
         "Execution Time": new Date().toLocaleString()
     },
     failedSummaryReport: true,
+    customStyle: './scripts/custom-style.css',
 };
 
 try {

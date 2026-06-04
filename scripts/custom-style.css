@@ -1,0 +1,53 @@
+table {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin-bottom: 1rem;
+  background-color: transparent;
+  border-collapse: collapse;
+}
+
+table th,
+table td {
+  padding: 0.75rem;
+  vertical-align: top;
+  border-top: 1px solid #dee2e6;
+  text-align: left;
+}
+
+table thead th {
+  vertical-align: bottom;
+  border-bottom: 2px solid #dee2e6;
+  background-color: #f8f9fa;
+  font-weight: bold;
+}
+
+table tbody + tbody {
+  border-top: 2px solid #dee2e6;
+}
+
+table .table-bordered {
+  border: 1px solid #dee2e6;
+}
+
+table .table-bordered th,
+table .table-bordered td {
+  border: 1px solid #dee2e6;
+}
+
+/* Ensure failed summary table looks like a bootstrap table */
+div.panel-heading + div table, 
+#failed-summary-table,
+.failed-summary table {
+  width: 100% !important;
+  border: 1px solid #dee2e6 !important;
+}
+
+.failed-summary table th {
+  background-color: #f8f9fa !important;
+  font-weight: bold !important;
+  border-bottom: 2px solid #dee2e6 !important;
+}
+
+.failed-summary table td {
+  border: 1px solid #dee2e6 !important;
+}
