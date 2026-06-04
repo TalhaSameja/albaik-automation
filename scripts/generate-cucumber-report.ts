@@ -18,8 +18,9 @@ const options = {
     reportSuiteAsScenarios: true,
     scenarioTimestamp: true,
     launchReport: false,
+    name: 'Albaik Mobile Automation',
     metadata: {
-        "Project": "Albaik Automation",
+        "Project": "Albaik Mobile Automation",
         "Test Environment": envName.toUpperCase(),
         "Platform": platformName,
         "Browser": browserName,
