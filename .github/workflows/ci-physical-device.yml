@@ -65,11 +65,6 @@ jobs:
           }
         shell: powershell
 
-      - name: Generate Allure Test Report
-        run: npm run allure:generate
-        shell: powershell
-        if: always()
-
       - name: Upload Cucumber HTML Report Artifact
         uses: actions/upload-artifact@v4
         if: always()
@@ -77,6 +72,11 @@ jobs:
           name: cucumber-html-report
           path: cucumber-html-reports
           retention-days: 14
+
+      - name: Zip Cucumber Report for Email
+        if: always()
+        run: Compress-Archive -Path cucumber-html-reports\* -DestinationPath cucumber-html-report.zip -Force
+        shell: powershell
 
       - name: Send Email Notification with Results
         uses: dawidd6/action-send-mail@v3
@@ -96,10 +96,11 @@ jobs:
             
             The automated test execution has finished running for the latest code changes.
             
-            Please find the detailed execution report securely available at the link below:
-            https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+            A ZIP file containing the detailed HTML execution report is attached to this email. Please download the attached ZIP file, extract it, and open 'index.html' in your browser to view the results.
             
-            (To download the report, scroll down to the "Artifacts" section at the bottom of the page and click the ZIP file).
+            You can also view the GitHub Actions run here:
+            https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
             
             Best Regards,
             QA Automation Team
+          attachments: cucumber-html-report.zip
