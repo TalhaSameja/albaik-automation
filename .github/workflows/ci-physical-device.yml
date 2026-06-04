@@ -17,6 +17,11 @@ on:
           - mobile
           - web
           - dual-mobile
+      cucumber_tags:
+        description: 'Optional: Tags to run specific testcases (e.g., @smoke or @delivery)'
+        required: false
+        default: ''
+        type: string
 
 jobs:
   execute-automation-tests:
@@ -59,8 +64,14 @@ jobs:
       - name: Execute Automation Test Suite
         env:
           TEST_PLATFORM: ${{ github.event.inputs.test_platform || 'cross-platform' }}
+          CUCUMBER_TAGS: ${{ github.event.inputs.cucumber_tags }}
           CI: true
-        run: npm run test:${env:TEST_PLATFORM}
+        run: |
+          if ($env:CUCUMBER_TAGS) {
+            npm run test:${env:TEST_PLATFORM} -- --cucumberOpts.tagExpression="$env:CUCUMBER_TAGS"
+          } else {
+            npm run test:${env:TEST_PLATFORM}
+          }
         shell: powershell
 
       - name: Generate Allure Test Report
