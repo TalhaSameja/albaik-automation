@@ -74,13 +74,21 @@ jobs:
           retention-days: 14
 
       - name: Zip Cucumber Report for Email
+        id: zip_report
         if: always()
-        run: Compress-Archive -Path cucumber-html-reports\* -DestinationPath cucumber-html-report.zip -Force
+        run: |
+          if (Test-Path "cucumber-html-reports") {
+            Compress-Archive -Path cucumber-html-reports\* -DestinationPath cucumber-html-report.zip -Force
+            echo "report_generated=true" >> $env:GITHUB_OUTPUT
+          } else {
+            Write-Warning "Cucumber reports directory not found. Skipping zip and email."
+            echo "report_generated=false" >> $env:GITHUB_OUTPUT
+          }
         shell: powershell
 
       - name: Send Email Notification with Results
         uses: dawidd6/action-send-mail@v3
-        if: always()
+        if: always() && steps.zip_report.outputs.report_generated == 'true'
         with:
           server_address: smtp.gmail.com
           server_port: 465

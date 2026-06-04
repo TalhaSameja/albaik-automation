@@ -9,7 +9,7 @@ Feature: Smoke Tests - Cross-Platform End-to-End
     Then Click on "Sign In" button
     Then Enter "532255875" into "5XXXXXXXX" Input
     Then Enter "11223344" as password
-    Then Click on "Sign In" button
+    Then Click on "Sign In - Intentionally Failing For Screenshot Test" button
     Then wait for "10" Seconds
     Then Verify that the "android:id/content" text is displayed
 
